@@ -1,7 +1,9 @@
+'use client';
+
 import React from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { CheckCircle2 } from 'lucide-react';
-import { useShop } from '../../context/ShopContext';
+import { useShop } from '@/context/ShopContext';
 
 export const ToastNotification: React.FC = () => {
   const { notificationMessage } = useShop();

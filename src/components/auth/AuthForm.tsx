@@ -1,9 +1,9 @@
-"use client";
+﻿"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "motion/react";
 import {
   Eye,
   EyeOff,
@@ -15,8 +15,8 @@ import {
   X,
 } from "lucide-react";
 
-import { useShop } from "../../context/ShopContext";
-import { CometSpinner } from "../../components/ui/comet-spinner";
+import { useShop } from "@/context/ShopContext";
+import { CometSpinner } from "@/components/ui/comet-spinner";
 
 interface AuthPageProps {
   initialMode?: "login" | "signup";
@@ -381,7 +381,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                           id="password"
                           type={showPassword ? "text" : "password"}
                           required
-                          placeholder="••••••••"
+                          placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           className="w-full rounded-lg border border-[#E5E0D8] bg-white py-3 pl-10 pr-10 text-sm text-[#1A1A18] outline-none transition-colors placeholder:text-[#8C8279]/60 focus:border-[#1A1A18]"

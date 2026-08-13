@@ -1,5 +1,6 @@
+﻿'use client'
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Product, CartItem } from '../types';
+import { Product, CartItem } from '@/types';
 
 export interface User {
   name: string;
@@ -48,6 +49,7 @@ const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
 export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(() => {
+    if (typeof window === 'undefined') return null;
     try {
       const saved = localStorage.getItem('aura_user');
       return saved ? JSON.parse(saved) : null;
@@ -57,6 +59,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const [cart, setCart] = useState<CartItem[]>(() => {
+    if (typeof window === 'undefined') return [];
     try {
       const saved = localStorage.getItem('aura_cart');
       return saved ? JSON.parse(saved) : [];
@@ -66,6 +69,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
   });
 
   const [wishlist, setWishlist] = useState<string[]>(() => {
+    if (typeof window === 'undefined') return ['prod-1', 'prod-3'];
     try {
       const saved = localStorage.getItem('aura_wishlist');
       return saved ? JSON.parse(saved) : ['prod-1', 'prod-3']; // Default sample items

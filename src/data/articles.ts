@@ -1,4 +1,4 @@
-import { JournalArticle } from '../types';
+﻿import { JournalArticle } from '@/types';
 
 export const MOCK_ARTICLES: JournalArticle[] = [
   {
@@ -19,7 +19,7 @@ export const MOCK_ARTICLES: JournalArticle[] = [
     content: [
       {
         type: 'paragraph',
-        text: 'Creating a serene living environment is fundamentally an exercise in editing. Rather than asking what additional decor or furniture piece to introduce, considered interior design begins with subtraction—removing visual friction and allowing spatial volume to breathe.'
+        text: 'Creating a serene living environment is fundamentally an exercise in editing. Rather than asking what additional decor or furniture piece to introduce, considered interior design begins with subtractionâ€”removing visual friction and allowing spatial volume to breathe.'
       },
       {
         type: 'heading',
@@ -77,7 +77,7 @@ export const MOCK_ARTICLES: JournalArticle[] = [
     id: 'art-3',
     slug: 'the-art-of-layering-textures',
     title: 'The Art of Layering Textures',
-    subtitle: 'Combining bouclé, travertine stone, matte metals, and woven wool.',
+    subtitle: 'Combining bouclÃ©, travertine stone, matte metals, and woven wool.',
     category: 'Guides',
     date: 'January 10, 2026',
     readTime: '4 min read',
@@ -87,7 +87,7 @@ export const MOCK_ARTICLES: JournalArticle[] = [
       avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300'
     },
     image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1200',
-    excerpt: 'A room dressed in a single material feels flat. Discover how juxtaposing cold stone against soft wool and tactile bouclé creates depth and tactile warmth.',
+    excerpt: 'A room dressed in a single material feels flat. Discover how juxtaposing cold stone against soft wool and tactile bouclÃ© creates depth and tactile warmth.',
     content: [
       {
         type: 'paragraph',

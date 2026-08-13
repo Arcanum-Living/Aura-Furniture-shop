@@ -1,9 +1,11 @@
+'use client';
+
 import React from 'react';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-export const AboutPage: React.FC = () => {
+const AboutPage: React.FC = () => {
   return (
     <div className="pt-24 pb-20 space-y-24">
       {/* Editorial Hero */}
@@ -111,3 +113,5 @@ export const AboutPage: React.FC = () => {
     </div>
   );
 };
+
+export default AboutPage;

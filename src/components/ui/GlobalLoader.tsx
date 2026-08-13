@@ -1,10 +1,10 @@
-'use client';
+﻿'use client';
 
 import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import { CometSpinner } from './comet-spinner';
-import { useShop } from '../../context/ShopContext';
+import { useShop } from '@/context/ShopContext';
 
 export const GlobalLoader: React.FC = () => {
   const { isPageLoading, setIsPageLoading } = useShop();
@@ -70,7 +70,7 @@ export const GlobalLoader: React.FC = () => {
               </div>
 
               <p className="text-[10px] tracking-[0.3em] uppercase text-[#8C8279] font-medium">
-                Curated Living • Atelier
+                Curated Living â€¢ Atelier
               </p>
             </motion.div>
           </div>

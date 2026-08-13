@@ -1,17 +1,17 @@
-'use client';
+﻿'use client';
 
 import React from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
-import { CATEGORIES_DATA } from '../../../data/categories';
-import { MOCK_PRODUCTS } from '../../../data/products';
-import { ProductCard } from '../../../components/shop/ProductCard';
+import { CATEGORIES_DATA } from '@/data/categories';
+import { MOCK_PRODUCTS } from '@/data/products';
+import { ProductCard } from '@/components/shop/ProductCard';
 
-export const CollectionCategoryPage: React.FC = () => {
-  const params = useParams<{ categorySlug: string }>();
+const CollectionCategoryPage: React.FC = () => {
+  const params = useParams<{ category: string }>();
 
-  const categorySlug = params.categorySlug;
+  const categorySlug = params.category;
 
   const category =
     CATEGORIES_DATA.find((c) => c.slug === categorySlug) ||
@@ -74,7 +74,7 @@ export const CollectionCategoryPage: React.FC = () => {
             href="/shop"
             className="hover:underline font-medium"
           >
-            View All Shop Furniture →
+            View All Shop Furniture â†’
           </Link>
         </div>
 

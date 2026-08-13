@@ -1,6 +1,6 @@
-'use client';
+﻿'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'motion/react';
 import {
@@ -12,10 +12,10 @@ import {
   Check,
   RotateCcw,
 } from 'lucide-react';
-import { MOCK_PRODUCTS } from '../../data/products';
-import { ProductCard } from '../../components/shop/ProductCard';
+import { MOCK_PRODUCTS } from '@/data/products';
+import { ProductCard } from '@/components/shop/ProductCard';
 
-export const ShopPage: React.FC = () => {
+const ShopPageContent: React.FC = () => {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -45,7 +45,7 @@ export const ShopPage: React.FC = () => {
         p.material.includes('Stone')
       )
         list.add('Travertine & Stone');
-      else if (p.material.includes('Bouclé')) list.add('Bouclé Fabric');
+      else if (p.material.includes('BouclÃ©')) list.add('BouclÃ© Fabric');
       else if (p.material.includes('Linen')) list.add('Linen & Cotton');
       else if (
         p.material.includes('Brass') ||
@@ -220,7 +220,7 @@ export const ShopPage: React.FC = () => {
               <option value="newest">New Arrivals</option>
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
-              <option value="name-asc">Name: A–Z</option>
+              <option value="name-asc">Name: Aâ€“Z</option>
             </select>
           </div>
 
@@ -558,3 +558,12 @@ export const ShopPage: React.FC = () => {
     </div>
   );
 };
+const ShopPage: React.FC = () => {
+  return (
+    <Suspense fallback={null}>
+      <ShopPageContent />
+    </Suspense>
+  );
+};
+
+export default ShopPage;

@@ -1,13 +1,14 @@
+﻿'use client'
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { ArrowRight, CheckCircle2, Sparkles, Shield, Compass } from 'lucide-react';
-import { MOCK_PRODUCTS } from '../data/products';
-import { CATEGORIES_DATA } from '../data/categories';
-import { MOCK_ARTICLES } from '../data/articles';
-import { ProductCard } from '../components/shop/ProductCard';
+import { MOCK_PRODUCTS } from '@/data/products';
+import { CATEGORIES_DATA } from '@/data/categories';
+import { MOCK_ARTICLES } from '@/data/articles';
+import { ProductCard } from '@/components/shop/ProductCard';
 
-export const HomePage: React.FC = () => {
+const HomePage: React.FC = () => {
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
   const [newsletterError, setNewsletterError] = useState('');
@@ -91,7 +92,7 @@ export const HomePage: React.FC = () => {
             {/* Floating Label Card */}
             <div className="absolute bottom-8 left-8 sm:bottom-10 sm:left-10 bg-white/90 backdrop-blur-md p-5 border border-[#E5E0D8] max-w-[260px] rounded-xs shadow-lg z-10">
               <div className="text-[10px] text-[#D4AF37] mb-1 font-bold tracking-[0.2em] uppercase">NEW ARRIVAL</div>
-              <div className="text-sm font-serif text-[#1A1A18] font-medium mb-1">Klova Lounge Chair in Ivory Bouclé</div>
+              <div className="text-sm font-serif text-[#1A1A18] font-medium mb-1">Klova Lounge Chair in Ivory BouclÃ©</div>
               <div className="text-xs text-[#8C8279] font-light">Available in 4 curated natural finishes.</div>
             </div>
           </div>
@@ -184,7 +185,7 @@ export const HomePage: React.FC = () => {
             </h2>
           </div>
           <p className="text-xs text-[#8C8279] font-light max-w-xs mt-2 md:mt-0">
-            Designed for the way you live—balanced proportions and tactile materials for every sanctuary.
+            Designed for the way you liveâ€”balanced proportions and tactile materials for every sanctuary.
           </p>
         </div>
 
@@ -368,7 +369,7 @@ export const HomePage: React.FC = () => {
               Handwoven Textiles
             </h3>
             <p className="text-xs text-[#8C8279] font-light leading-relaxed">
-              Tactile bouclé yarns, stonewashed French flax linen, and heavy virgin wool spun for rich physical depth and supreme softness.
+              Tactile bouclÃ© yarns, stonewashed French flax linen, and heavy virgin wool spun for rich physical depth and supreme softness.
             </p>
           </div>
         </div>
@@ -378,7 +379,7 @@ export const HomePage: React.FC = () => {
             href="/craft"
             className="text-xs font-semibold uppercase tracking-[0.25em] text-[#1A1A18] hover:text-[#8C8279] border-b border-[#1A1A18] pb-1 transition-colors"
           >
-            Explore Our Artisanal Craft Process →
+            Explore Our Artisanal Craft Process â†’
           </Link>
         </div>
       </section>
@@ -398,7 +399,7 @@ export const HomePage: React.FC = () => {
             href="/journal"
             className="text-xs font-semibold uppercase tracking-[0.2em] text-[#1A1A18] hover:text-[#8C8279] mt-2 md:mt-0"
           >
-            Read All Stories →
+            Read All Stories â†’
           </Link>
         </div>
 
@@ -415,7 +416,7 @@ export const HomePage: React.FC = () => {
               <div className="space-y-1.5">
                 <div className="flex items-center space-x-2 text-[10px] uppercase tracking-widest text-[#8C8279]">
                   <span className="font-semibold text-[#1A1A18]">{article.category}</span>
-                  <span>•</span>
+                  <span>â€¢</span>
                   <span>{article.readTime}</span>
                 </div>
                 <Link href={`/journal/${article.slug}`}>
@@ -431,7 +432,7 @@ export const HomePage: React.FC = () => {
                     href={`/journal/${article.slug}`}
                     className="text-xs font-medium uppercase tracking-wider text-[#1A1A18] hover:underline"
                   >
-                    Read Article →
+                    Read Article â†’
                   </Link>
                 </div>
               </div>
@@ -492,3 +493,5 @@ export const HomePage: React.FC = () => {
     </div>
   );
 };
+
+export default HomePage;

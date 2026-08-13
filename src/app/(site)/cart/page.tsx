@@ -1,9 +1,11 @@
+'use client';
+
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Trash2, Plus, Minus, ArrowRight, ShieldCheck, Truck, CheckCircle2 } from 'lucide-react';
-import { useShop } from '../../context/ShopContext';
+import { useShop } from '@/context/ShopContext';
 
-export const CartPage: React.FC = () => {
+const CartPage: React.FC = () => {
   const { cart, removeFromCart, updateQuantity, cartSubtotal, clearCart } = useShop();
 
   const [promoCode, setPromoCode] = useState('');
@@ -163,7 +165,7 @@ export const CartPage: React.FC = () => {
 
             <div className="flex justify-between items-center text-xs">
               <Link href ="/shop" className="text-[#1A1A18] font-semibold uppercase tracking-wider hover:underline">
-                ← Continue Shopping
+                â† Continue Shopping
               </Link>
               <button
                 onClick={clearCart}
@@ -261,3 +263,5 @@ export const CartPage: React.FC = () => {
     </div>
   );
 };
+
+export default CartPage;

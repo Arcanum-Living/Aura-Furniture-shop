@@ -1,7 +1,9 @@
+'use client';
+
 import React, { useState } from 'react';
 import { CheckCircle2, Send, Sparkles } from 'lucide-react';
 
-export const InteriorDesignPage: React.FC = () => {
+const InteriorDesignPage: React.FC = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -191,3 +193,5 @@ export const InteriorDesignPage: React.FC = () => {
     </div>
   );
 };
+
+export default InteriorDesignPage;

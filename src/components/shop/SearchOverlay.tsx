@@ -1,15 +1,17 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import { Search, X, ArrowRight, Sparkles } from 'lucide-react';
-import { useShop } from '../../../context/ShopContext';
-import { MOCK_PRODUCTS } from '../../../../data/products';
+import { useShop } from '@/context/ShopContext';
+import { MOCK_PRODUCTS } from '@/data/products';
 
 export const SearchOverlay: React.FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useShop();
   const [searchTerm, setSearchTerm] = useState('');
   const [recentSearches, setRecentSearches] = useState<string[]>([
-    'Bouclé Chair',
+    'BouclÃ© Chair',
     'Travertine Table',
     'Brass Pendant',
     'Japandi Bed'
@@ -121,25 +123,25 @@ export const SearchOverlay: React.FC = () => {
                   </h4>
                   <div className="space-y-2">
                     <Link
-                      to="/collections/living"
+                      href="/collections/living"
                       onClick={() => setIsSearchOpen(false)}
                       className="block text-sm font-medium text-[#1A1A18] hover:text-[#8C8279] transition-colors"
                     >
-                      Living Room & Armchairs →
+                      Living Room & Armchairs â†’
                     </Link>
                     <Link
-                      to="/collections/lighting"
+                      href="/collections/lighting"
                       onClick={() => setIsSearchOpen(false)}
                       className="block text-sm font-medium text-[#1A1A18] hover:text-[#8C8279] transition-colors"
                     >
-                      Travertine & Brass Lighting →
+                      Travertine & Brass Lighting â†’
                     </Link>
                     <Link
-                      to="/collections/dining"
+                      href="/collections/dining"
                       onClick={() => setIsSearchOpen(false)}
                       className="block text-sm font-medium text-[#1A1A18] hover:text-[#8C8279] transition-colors"
                     >
-                      Solid Oak Dining Tables →
+                      Solid Oak Dining Tables â†’
                     </Link>
                   </div>
                 </div>
@@ -155,11 +157,11 @@ export const SearchOverlay: React.FC = () => {
                   </p>
                   {searchResults.length > 0 && (
                     <Link
-                      to={`/shop?q=${encodeURIComponent(searchTerm)}`}
+                      href={`/shop?q=${encodeURIComponent(searchTerm)}`}
                       onClick={() => setIsSearchOpen(false)}
                       className="text-xs font-semibold text-[#1A1A18] hover:underline uppercase tracking-wider"
                     >
-                      View all in Shop →
+                      View all in Shop â†’
                     </Link>
                   )}
                 </div>
@@ -179,7 +181,7 @@ export const SearchOverlay: React.FC = () => {
                     {searchResults.map((product) => (
                       <Link
                         key={product.id}
-                        to={`/shop/${product.slug}`}
+                        href={`/shop/${product.slug}`}
                         onClick={() => setIsSearchOpen(false)}
                         className="group flex space-x-4 p-3 bg-white hover:bg-[#F0EBE1] transition-colors rounded-xs border border-[#E5E0D8]"
                       >

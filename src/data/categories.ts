@@ -1,4 +1,4 @@
-import { CollectionCategory } from '../types';
+﻿import { CollectionCategory } from '@/types';
 
 export const CATEGORIES_DATA: CollectionCategory[] = [
   {
@@ -46,7 +46,7 @@ export const CATEGORIES_DATA: CollectionCategory[] = [
     slug: 'lighting',
     name: 'Luminance & Lighting',
     tagline: 'Lamps & Pendants',
-    description: 'Warm, sculptural illumination—from mouth-blown glass pendants to solid brass table accents.',
+    description: 'Warm, sculptural illuminationâ€”from mouth-blown glass pendants to solid brass table accents.',
     image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&q=80&w=1200',
     itemCount: 15,
     featuredProductIds: ['prod-3', 'prod-8', 'prod-15']

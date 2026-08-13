@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import Link from 'next/link';
@@ -17,11 +17,11 @@ import {
   ChevronUp,
 } from 'lucide-react';
 
-import { MOCK_PRODUCTS, MOCK_REVIEWS } from '../../../data/products';
-import { useShop } from '../../../context/ShopContext';
-import { ProductCard } from '../../../components/shop/ProductCard';
+import { MOCK_PRODUCTS, MOCK_REVIEWS } from '@/data/products';
+import { useShop } from '@/context/ShopContext';
+import { ProductCard } from '@/components/shop/ProductCard';
 
-export const ProductDetailsPage: React.FC = () => {
+const ProductDetailsPage: React.FC = () => {
   const params = useParams<{ slug: string }>();
   const slug = params.slug;
 
@@ -452,7 +452,7 @@ export const ProductDetailsPage: React.FC = () => {
               <p className="text-[11px] font-semibold text-[#1A1A18] pt-2 border-t border-[#E5E0D8]">
                 {rev.author}{' '}
                 <span className="text-[#8C8279] font-normal">
-                  • Verified Buyer
+                  â€¢ Verified Buyer
                 </span>
               </p>
             </div>
@@ -478,7 +478,7 @@ export const ProductDetailsPage: React.FC = () => {
               href="/shop"
               className="text-xs font-semibold uppercase tracking-wider text-[#1A1A18] hover:text-[#8C8279]"
             >
-              View All →
+              View All â†’
             </Link>
           </div>
 

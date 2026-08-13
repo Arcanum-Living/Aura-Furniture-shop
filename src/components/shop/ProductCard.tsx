@@ -1,9 +1,11 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { Heart, Eye, Plus, Star } from 'lucide-react';
-import { Product } from '../../types';
-import { useShop } from '../../../context/ShopContext';
+import { Product } from '@/types';
+import { useShop } from '@/context/ShopContext';
 
 interface ProductCardProps {
   product: Product;
@@ -55,7 +57,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </button>
 
         {/* Product Main Image */}
-        <Link to={`/shop/${product.slug}`} className="block w-full h-full">
+        <Link href ={`/shop/${product.slug}`} className="block w-full h-full">
           <img
             src={product.images[0]}
             alt={product.name}
@@ -112,7 +114,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           </div>
         </div>
 
-        <Link to={`/shop/${product.slug}`} className="group-hover:text-[#8C8279] transition-colors">
+        <Link href ={`/shop/${product.slug}`} className="group-hover:text-[#8C8279] transition-colors">
           <h3 className="font-serif text-lg font-medium text-[#1A1A18] line-clamp-1">
             {product.name}
           </h3>
@@ -134,7 +136,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
             )}
           </div>
           <span className="text-[11px] text-[#8C8279] tracking-wider uppercase font-light">
-            {product.leadTime?.split('—')[0] || 'In Stock'}
+            {product.leadTime?.split('â€”')[0] || 'In Stock'}
           </span>
         </div>
       </div>

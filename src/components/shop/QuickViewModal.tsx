@@ -1,8 +1,10 @@
+'use client';
+
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Heart, Plus, Minus, ShoppingBag, Star, ArrowRight } from 'lucide-react';
-import { useShop } from '../../../context/ShopContext';
+import { useShop } from '@/context/ShopContext';
 
 export const QuickViewModal: React.FC = () => {
   const { quickViewProduct, setQuickViewProduct, addToCart, toggleWishlist, isInWishlist } = useShop();
@@ -182,11 +184,11 @@ export const QuickViewModal: React.FC = () => {
                 </div>
 
                 <Link
-                  to={`/shop/${quickViewProduct.slug}`}
+                  href={`/shop/${quickViewProduct.slug}`}
                   onClick={() => setQuickViewProduct(null)}
                   className="block text-center text-xs text-[#8C8279] hover:text-[#1A1A18] font-medium uppercase tracking-wider transition-colors pt-2"
                 >
-                  View Full Product Details & Specifications →
+                  View Full Product Details & Specifications â†’
                 </Link>
               </div>
             </div>
