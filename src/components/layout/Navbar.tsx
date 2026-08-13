@@ -1,14 +1,16 @@
+﻿'use client';
+
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Search, Heart, ShoppingBag, Menu, X, User, LogOut, CheckCircle2 } from 'lucide-react';
-import { useShop } from '../../../context/ShopContext';
+import { useShop } from '@/context/ShopContext';
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
-  const location = useLocation();
-  const navigate = useNavigate();
+  const pathname = usePathname();
   const {
     user,
     logoutUser,
@@ -20,7 +22,7 @@ export const Navbar: React.FC = () => {
     setIsMobileMenuOpen
   } = useShop();
 
-  const isHomePage = location.pathname === '/';
+  const isHomePage = pathname === '/';
 
   // Close user menu on outside click
   useEffect(() => {
@@ -64,28 +66,28 @@ export const Navbar: React.FC = () => {
           {/* Left Nav (Desktop) */}
           <nav className="hidden md:flex items-center space-x-8 text-[11px] tracking-[0.2em] uppercase font-semibold">
             <Link
-              to="/shop"
+              href="/shop"
               className={`${textColorClass} hover:text-[#8C8279] transition-colors relative group py-1`}
             >
               Shop
               <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#1A1A18] transition-all duration-300 group-hover:w-full" />
             </Link>
             <Link
-              to="/collections"
+              href="/collections"
               className={`${textColorClass} hover:text-[#8C8279] transition-colors relative group py-1`}
             >
               Collections
               <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#1A1A18] transition-all duration-300 group-hover:w-full" />
             </Link>
             <Link
-              to="/about"
+              href="/about"
               className={`${textColorClass} hover:text-[#8C8279] transition-colors relative group py-1`}
             >
               Studio
               <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#1A1A18] transition-all duration-300 group-hover:w-full" />
             </Link>
             <Link
-              to="/journal"
+              href="/journal"
               className={`${textColorClass} hover:text-[#8C8279] transition-colors relative group py-1`}
             >
               Journal
@@ -96,7 +98,7 @@ export const Navbar: React.FC = () => {
           {/* Center Brand Logo */}
           <div className="flex-1 md:flex-initial text-center md:text-left">
             <Link
-              to="/"
+              href="/"
               className={`font-serif italic text-3xl tracking-[0.1em] text-[#1A1A18] inline-block transition-colors`}
               id="brand-logo"
             >
@@ -116,7 +118,7 @@ export const Navbar: React.FC = () => {
             </button>
 
             <Link
-              to="/wishlist"
+              href="/wishlist"
               aria-label="Wishlist"
               className={`hidden sm:block ${textColorClass} hover:opacity-70 transition-opacity p-1 relative`}
               id="nav-wishlist-btn"
@@ -144,7 +146,7 @@ export const Navbar: React.FC = () => {
                 </button>
               ) : (
                 <Link
-                  to="/login"
+                  href="/login"
                   aria-label="Login / Sign In"
                   className={`${textColorClass} hover:opacity-70 transition-opacity p-1 focus:outline-hidden block`}
                   id="nav-user-btn"
@@ -165,7 +167,7 @@ export const Navbar: React.FC = () => {
                   </div>
                   <div className="py-1">
                     <Link
-                      to="/wishlist"
+                      href="/wishlist"
                       onClick={() => setIsUserMenuOpen(false)}
                       className="px-4 py-2 text-xs text-[#1A1A18] hover:bg-[#F9F8F6] flex items-center justify-between"
                     >
@@ -173,7 +175,7 @@ export const Navbar: React.FC = () => {
                       <span className="text-[10px] font-bold text-[#8C8279]">{wishlist.length}</span>
                     </Link>
                     <Link
-                      to="/cart"
+                      href="/cart"
                       onClick={() => setIsUserMenuOpen(false)}
                       className="px-4 py-2 text-xs text-[#1A1A18] hover:bg-[#F9F8F6] flex items-center justify-between"
                     >

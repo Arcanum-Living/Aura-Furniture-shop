@@ -1,10 +1,12 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import { ArrowRight } from 'lucide-react';
-import { CATEGORIES_DATA } from '../../data/categories';
+import { CATEGORIES_DATA } from '@/data/categories';
 
-export const CollectionsPage: React.FC = () => {
+const CollectionsPage: React.FC = () => {
   return (
     <div className="pt-24 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
       {/* Editorial Header */}
@@ -16,7 +18,7 @@ export const CollectionsPage: React.FC = () => {
           The Collections
         </h1>
         <p className="text-sm text-[#8C8279] font-light leading-relaxed">
-          Explore spatial environments curated by interior architects—where form, proportion, and organic natural materials unify into harmonious living quarters.
+          Explore spatial environments curated by interior architectsâ€”where form, proportion, and organic natural materials unify into harmonious living quarters.
         </p>
       </div>
 
@@ -53,7 +55,7 @@ export const CollectionsPage: React.FC = () => {
               {/* Category Editorial Content (5 Cols) */}
               <div className={`lg:col-span-5 space-y-5 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
                 <span className="text-xs uppercase tracking-[0.25em] font-semibold text-[#D4AF37]">
-                  0{idx + 1} — {cat.tagline}
+                  0{idx + 1} â€” {cat.tagline}
                 </span>
                 <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1A18] font-medium">
                   {cat.name}
@@ -78,3 +80,5 @@ export const CollectionsPage: React.FC = () => {
     </div>
   );
 };
+
+export default CollectionsPage;

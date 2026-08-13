@@ -1,10 +1,12 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { Heart, ShoppingBag, Trash2, ArrowRight } from 'lucide-react';
-import { useShop } from '../../context/ShopContext';
-import { MOCK_PRODUCTS } from '../../data/products';
+import { useShop } from '@/context/ShopContext';
+import { MOCK_PRODUCTS } from '@/data/products';
 
-export const WishlistPage: React.FC = () => {
+const WishlistPage: React.FC = () => {
   const { wishlist, toggleWishlist, addToCart } = useShop();
 
   const wishlistedProducts = MOCK_PRODUCTS.filter((p) => wishlist.includes(p.id));
@@ -97,3 +99,5 @@ export const WishlistPage: React.FC = () => {
     </div>
   );
 };
+
+export default WishlistPage;

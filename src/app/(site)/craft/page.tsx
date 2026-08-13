@@ -1,9 +1,11 @@
+'use client';
+
 import React from 'react';
 import { motion } from 'motion/react';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
-export const CraftPage: React.FC = () => {
+const CraftPage: React.FC = () => {
   const steps = [
     {
       step: '01',
@@ -99,3 +101,5 @@ export const CraftPage: React.FC = () => {
     </div>
   );
 };
+
+export default CraftPage;

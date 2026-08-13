@@ -1,11 +1,11 @@
-"use client";
+﻿"use client";
 
 import React, { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { X, ArrowRight, Heart, User } from "lucide-react";
-import { useShop } from "../../context/ShopContext";
+import { useShop } from "@/context/ShopContext";
 
 export const MobileMenu: React.FC = () => {
   const {
@@ -188,7 +188,7 @@ export const MobileMenu: React.FC = () => {
             </div>
 
             <div className="text-[11px] text-[#8C8279] tracking-wider text-center pt-2 border-t border-[#E5E0D8]">
-              125 Design District Ave, NYC • hello@auradesign.com
+              125 Design District Ave, NYC â€¢ hello@auradesign.com
             </div>
           </div>
         </motion.div>

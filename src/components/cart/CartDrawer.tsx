@@ -1,8 +1,10 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Plus, Minus, Trash2, ArrowRight, ShoppingBag } from 'lucide-react';
-import { useShop } from '../../context/ShopContext';
+import { useShop } from '@/context/ShopContext';
 
 export const CartDrawer: React.FC = () => {
   const {
@@ -61,7 +63,7 @@ export const CartDrawer: React.FC = () => {
               <div className="bg-[#F0EBE1] px-6 py-3 border-b border-[#E5E0D8]">
                 {cartSubtotal >= FREE_SHIPPING_THRESHOLD ? (
                   <p className="text-xs text-[#1A1A18] font-medium tracking-wide text-center">
-                    ✨ Congratulations! You unlocked <span className="font-semibold text-[#8C8279]">Complimentary White Glove Delivery</span>.
+                    âœ¨ Congratulations! You unlocked <span className="font-semibold text-[#8C8279]">Complimentary White Glove Delivery</span>.
                   </p>
                 ) : (
                   <div className="space-y-1.5">
