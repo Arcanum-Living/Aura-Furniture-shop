@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Bell,
   Search,
@@ -14,8 +17,8 @@ import {
   LogOut,
   ExternalLink,
   X,
-} from 'lucide-react';
-import { useAdmin } from '../../context/AdminContext';
+} from "lucide-react";
+import { useAdmin } from "../../context/AdminContext";
 
 export const AdminHeader: React.FC = () => {
   const {
@@ -28,39 +31,48 @@ export const AdminHeader: React.FC = () => {
     messages,
   } = useAdmin();
 
-  const location = useLocation();
-  const navigate = useNavigate();
+  const pathname = usePathname();
+  const router = useRouter();
 
   const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
-  // Generate breadcrumbs from pathname
-  const pathSegments = location.pathname.split('/').filter(Boolean);
+  // Breadcrumbs from pathname
+  const pathSegments = pathname.split("/").filter(Boolean);
   const breadcrumbs = pathSegments.map((segment, index) => {
-    const url = `/${pathSegments.slice(0, index + 1).join('/')}`;
-    const formatted = segment.charAt(0).toUpperCase() + segment.slice(1).replace('-', ' ');
+    const url = `/${pathSegments.slice(0, index + 1).join("/")}`;
+    const formatted = segment.charAt(0).toUpperCase() + segment.slice(1).replace("-", " ");
     return { name: formatted, url };
   });
 
-  // Recent Notifications
   const lowStockProducts = products.filter((p) => p.stock <= p.lowStockThreshold);
-  const pendingOrders = orders.filter((o) => o.status === 'Pending' || o.status === 'Processing');
-  const unreadMessages = messages.filter((m) => m.status === 'Unread');
-  const totalNotificationsCount = lowStockProducts.length + pendingOrders.length + unreadMessages.length;
+  const pendingOrders = orders.filter(
+    (o) => o.status === "Pending" || o.status === "Processing"
+  );
+  const unreadMessages = messages.filter((m) => m.status === "Unread");
+  const totalNotificationsCount =
+    lowStockProducts.length + pendingOrders.length + unreadMessages.length;
 
-  // Search Results
   const searchResultsProducts = searchQuery
-    ? products.filter((p) => p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.sku.toLowerCase().includes(searchQuery.toLowerCase()))
+    ? products.filter(
+        (p) =>
+          p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          p.sku.toLowerCase().includes(searchQuery.toLowerCase())
+      )
     : [];
   const searchResultsOrders = searchQuery
-    ? orders.filter((o) => o.orderNumber.toLowerCase().includes(searchQuery.toLowerCase()) || o.customerName.toLowerCase().includes(searchQuery.toLowerCase()))
+    ? orders.filter(
+        (o) =>
+          o.orderNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          o.customerName.toLowerCase().includes(searchQuery.toLowerCase())
+      )
     : [];
 
   return (
     <header className="sticky top-0 z-20 h-16 bg-white dark:bg-[#1A1A18] border-b border-[#E5E0D8] dark:border-[#333230] px-4 sm:px-6 flex items-center justify-between transition-colors">
-      
+
       {/* Left: Mobile Toggle & Breadcrumbs */}
       <div className="flex items-center gap-3">
         <button
@@ -71,9 +83,11 @@ export const AdminHeader: React.FC = () => {
           <Menu className="w-5 h-5" />
         </button>
 
-        {/* Breadcrumb Navigation */}
         <nav className="hidden sm:flex items-center space-x-1.5 text-xs text-[#8C8279] dark:text-[#A0988E]">
-          <Link to="/admin" className="hover:text-[#1A1A18] dark:hover:text-white transition-colors font-medium">
+          <Link
+            href="/admin"
+            className="hover:text-[#1A1A18] dark:hover:text-white transition-colors font-medium"
+          >
             AURA Admin
           </Link>
           {breadcrumbs.map((crumb, idx) => (
@@ -84,7 +98,10 @@ export const AdminHeader: React.FC = () => {
                   {crumb.name}
                 </span>
               ) : (
-                <Link to={crumb.url} className="hover:text-[#1A1A18] dark:hover:text-white transition-colors capitalize">
+                <Link
+                  href={crumb.url}
+                  className="hover:text-[#1A1A18] dark:hover:text-white transition-colors capitalize"
+                >
                   {crumb.name}
                 </Link>
               )}
@@ -93,10 +110,10 @@ export const AdminHeader: React.FC = () => {
         </nav>
       </div>
 
-      {/* Right Action Icons */}
+      {/* Right Actions */}
       <div className="flex items-center gap-2 sm:gap-3">
-        
-        {/* Command Search Button Trigger */}
+
+        {/* Search Trigger */}
         <button
           onClick={() => setIsSearchOpen(true)}
           className="flex items-center gap-2 px-3 py-1.5 bg-[#F9F8F6] dark:bg-[#2A2926] border border-[#E5E0D8] dark:border-[#333230] rounded-xs text-xs text-[#8C8279] dark:text-[#A0988E] hover:border-[#1A1A18] dark:hover:border-white transition-colors"
@@ -108,9 +125,9 @@ export const AdminHeader: React.FC = () => {
           </kbd>
         </button>
 
-        {/* Live Store Quick Link */}
+        {/* Live Store Link */}
         <Link
-          to="/"
+          href="/"
           target="_blank"
           className="hidden sm:flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 border border-[#E5E0D8] dark:border-[#333230] hover:bg-[#F0EBE1] dark:hover:bg-[#2A2926] rounded-xs transition-colors text-[#1A1A18] dark:text-white"
         >
@@ -118,22 +135,24 @@ export const AdminHeader: React.FC = () => {
           <ExternalLink className="w-3 h-3 text-[#8C8279]" />
         </Link>
 
-        {/* Dark / Light Theme Toggle */}
+        {/* Dark Mode Toggle */}
         <button
           onClick={toggleDarkMode}
           className="p-2 rounded-xs border border-[#E5E0D8] dark:border-[#333230] text-[#1A1A18] dark:text-white hover:bg-[#F0EBE1] dark:hover:bg-[#2A2926] transition-colors"
-          title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-          aria-label="Toggle Theme"
+          title={isDarkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
         >
-          {isDarkMode ? <Sun className="w-4 h-4 text-[#D4AF37]" /> : <Moon className="w-4 h-4 text-[#1A1A18]" />}
+          {isDarkMode ? (
+            <Sun className="w-4 h-4 text-[#D4AF37]" />
+          ) : (
+            <Moon className="w-4 h-4 text-[#1A1A18]" />
+          )}
         </button>
 
-        {/* Notifications Button & Popover */}
+        {/* Notifications */}
         <div className="relative">
           <button
             onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
             className="p-2 rounded-xs border border-[#E5E0D8] dark:border-[#333230] text-[#1A1A18] dark:text-white hover:bg-[#F0EBE1] dark:hover:bg-[#2A2926] transition-colors relative"
-            aria-label="Notifications"
           >
             <Bell className="w-4 h-4" />
             {totalNotificationsCount > 0 && (
@@ -143,7 +162,6 @@ export const AdminHeader: React.FC = () => {
             )}
           </button>
 
-          {/* Notifications Popover */}
           {isNotificationsOpen && (
             <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-[#1A1A18] border border-[#E5E0D8] dark:border-[#333230] rounded-xs shadow-2xl z-50 p-4 space-y-3 animate-in fade-in slide-in-from-top-2">
               <div className="flex items-center justify-between pb-2 border-b border-[#E5E0D8] dark:border-[#333230]">
@@ -164,7 +182,7 @@ export const AdminHeader: React.FC = () => {
                     key={prod.id}
                     onClick={() => {
                       setIsNotificationsOpen(false);
-                      navigate('/admin/inventory');
+                      router.push("/admin/inventory");
                     }}
                     className="pt-2 flex items-start gap-3 cursor-pointer hover:bg-[#F9F8F6] dark:hover:bg-[#2A2926] p-1.5 rounded-xs transition-colors"
                   >
@@ -172,7 +190,7 @@ export const AdminHeader: React.FC = () => {
                     <div className="text-xs">
                       <p className="font-medium text-[#1A1A18] dark:text-white">Low Stock Warning</p>
                       <p className="text-[#8C8279] text-[11px]">
-                        {prod.name} has only <strong>{prod.stock} items</strong> left in inventory.
+                        {prod.name} has only <strong>{prod.stock} items</strong> left.
                       </p>
                     </div>
                   </div>
@@ -183,7 +201,7 @@ export const AdminHeader: React.FC = () => {
                     key={ord.id}
                     onClick={() => {
                       setIsNotificationsOpen(false);
-                      navigate(`/admin/orders/${ord.id}`);
+                      router.push(`/admin/orders/${ord.id}`);
                     }}
                     className="pt-2 flex items-start gap-3 cursor-pointer hover:bg-[#F9F8F6] dark:hover:bg-[#2A2926] p-1.5 rounded-xs transition-colors"
                   >
@@ -202,7 +220,7 @@ export const AdminHeader: React.FC = () => {
                     key={msg.id}
                     onClick={() => {
                       setIsNotificationsOpen(false);
-                      navigate('/admin/messages');
+                      router.push("/admin/messages");
                     }}
                     className="pt-2 flex items-start gap-3 cursor-pointer hover:bg-[#F9F8F6] dark:hover:bg-[#2A2926] p-1.5 rounded-xs transition-colors"
                   >
@@ -226,7 +244,7 @@ export const AdminHeader: React.FC = () => {
           )}
         </div>
 
-        {/* User Avatar Menu */}
+        {/* User Menu */}
         <div className="relative">
           <button
             onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
@@ -246,7 +264,7 @@ export const AdminHeader: React.FC = () => {
               <button
                 onClick={() => {
                   setIsUserMenuOpen(false);
-                  navigate('/admin/settings');
+                  router.push("/admin/settings");
                 }}
                 className="w-full text-left px-3 py-2 hover:bg-[#F9F8F6] dark:hover:bg-[#2A2926] rounded-xs flex items-center gap-2"
               >
@@ -256,7 +274,7 @@ export const AdminHeader: React.FC = () => {
               <button
                 onClick={() => {
                   setIsUserMenuOpen(false);
-                  navigate('/');
+                  router.push("/");
                 }}
                 className="w-full text-left px-3 py-2 hover:bg-rose-50 dark:hover:bg-rose-950/30 text-rose-600 rounded-xs flex items-center gap-2 mt-1"
               >
@@ -266,10 +284,9 @@ export const AdminHeader: React.FC = () => {
             </div>
           )}
         </div>
-
       </div>
 
-      {/* Command Search Overlay Modal */}
+      {/* Command Search Modal */}
       {isSearchOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-start justify-center pt-20 px-4">
           <div className="bg-white dark:bg-[#1A1A18] border border-[#E5E0D8] dark:border-[#333230] rounded-xs max-w-xl w-full shadow-2xl p-4 space-y-4 animate-in fade-in zoom-in-95">
@@ -286,7 +303,7 @@ export const AdminHeader: React.FC = () => {
               <button
                 onClick={() => {
                   setIsSearchOpen(false);
-                  setSearchQuery('');
+                  setSearchQuery("");
                 }}
                 className="p-1 text-[#8C8279] hover:text-[#1A1A18] dark:hover:text-white"
               >
@@ -299,7 +316,7 @@ export const AdminHeader: React.FC = () => {
                 {searchResultsProducts.length > 0 && (
                   <div>
                     <h4 className="font-bold text-[#8C8279] uppercase text-[10px] tracking-wider mb-2">
-                      Matching Products ({searchResultsProducts.length})
+                      Products ({searchResultsProducts.length})
                     </h4>
                     <div className="space-y-1">
                       {searchResultsProducts.map((p) => (
@@ -307,13 +324,17 @@ export const AdminHeader: React.FC = () => {
                           key={p.id}
                           onClick={() => {
                             setIsSearchOpen(false);
-                            setSearchQuery('');
-                            navigate(`/admin/products/${p.id}`);
+                            setSearchQuery("");
+                            router.push(`/admin/products/${p.id}`);
                           }}
                           className="flex items-center justify-between p-2 hover:bg-[#F9F8F6] dark:hover:bg-[#2A2926] rounded-xs cursor-pointer"
                         >
                           <div className="flex items-center gap-3">
-                            <img src={p.image} alt={p.name} className="w-8 h-8 object-cover rounded-xs" />
+                            <img
+                              src={p.image}
+                              alt={p.name}
+                              className="w-8 h-8 object-cover rounded-xs"
+                            />
                             <div>
                               <div className="font-medium text-[#1A1A18] dark:text-white">{p.name}</div>
                               <div className="text-[10px] text-[#8C8279]">SKU: {p.sku}</div>
@@ -331,7 +352,7 @@ export const AdminHeader: React.FC = () => {
                 {searchResultsOrders.length > 0 && (
                   <div>
                     <h4 className="font-bold text-[#8C8279] uppercase text-[10px] tracking-wider mb-2">
-                      Matching Orders ({searchResultsOrders.length})
+                      Orders ({searchResultsOrders.length})
                     </h4>
                     <div className="space-y-1">
                       {searchResultsOrders.map((o) => (
@@ -339,8 +360,8 @@ export const AdminHeader: React.FC = () => {
                           key={o.id}
                           onClick={() => {
                             setIsSearchOpen(false);
-                            setSearchQuery('');
-                            navigate(`/admin/orders/${o.id}`);
+                            setSearchQuery("");
+                            router.push(`/admin/orders/${o.id}`);
                           }}
                           className="flex items-center justify-between p-2 hover:bg-[#F9F8F6] dark:hover:bg-[#2A2926] rounded-xs cursor-pointer"
                         >
@@ -349,7 +370,9 @@ export const AdminHeader: React.FC = () => {
                             <div className="text-[10px] text-[#8C8279]">{o.customerName}</div>
                           </div>
                           <div className="text-right">
-                            <div className="font-semibold text-[#1A1A18] dark:text-white">${o.total.toLocaleString()}</div>
+                            <div className="font-semibold text-[#1A1A18] dark:text-white">
+                              ${o.total.toLocaleString()}
+                            </div>
                             <div className="text-[10px] text-amber-600">{o.status}</div>
                           </div>
                         </div>
@@ -360,7 +383,7 @@ export const AdminHeader: React.FC = () => {
 
                 {searchResultsProducts.length === 0 && searchResultsOrders.length === 0 && (
                   <div className="py-8 text-center text-[#8C8279]">
-                    No matching products or orders found for &ldquo;{searchQuery}&rdquo;.
+                    No results found for &ldquo;{searchQuery}&rdquo;.
                   </div>
                 )}
               </div>
@@ -368,7 +391,6 @@ export const AdminHeader: React.FC = () => {
           </div>
         </div>
       )}
-
     </header>
   );
 };
