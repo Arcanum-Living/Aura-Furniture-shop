@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { useAdmin } from '../../context/AdminContext';
 
 export const TopProducts: React.FC = () => {
@@ -19,8 +19,7 @@ export const TopProducts: React.FC = () => {
             Highest revenue generating items.
           </p>
         </div>
-        <Link
-          to="/admin/products"
+        <Link href ="/admin/products"
           className="text-xs font-semibold text-[#1A1A18] dark:text-[#D4AF37] hover:underline uppercase tracking-wider"
         >
           Catalog →
@@ -41,7 +40,7 @@ export const TopProducts: React.FC = () => {
               />
               <div className="min-w-0">
                 <Link
-                  to={`/admin/products/${product.id}`}
+                  href={`/admin/products/${product.id}`}
                   className="font-medium text-xs text-[#1A1A18] dark:text-white hover:underline truncate block"
                 >
                   {product.name}

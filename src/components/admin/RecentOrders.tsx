@@ -1,12 +1,13 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { MoreHorizontal, Eye, Truck, User } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 import { AdminOrder } from '../../data/adminMockData';
 
 export const RecentOrders: React.FC = () => {
   const { orders, updateOrderStatus } = useAdmin();
-  const navigate = useNavigate();
+  const router = useRouter();
 
   const [activeMenuId, setActiveMenuId] = React.useState<string | null>(null);
 
@@ -41,7 +42,7 @@ export const RecentOrders: React.FC = () => {
           </p>
         </div>
         <Link
-          to="/admin/orders"
+          href="/admin/orders"
           className="text-xs font-semibold text-[#1A1A18] dark:text-[#D4AF37] hover:underline uppercase tracking-wider"
         >
           View All Orders →
@@ -69,7 +70,7 @@ export const RecentOrders: React.FC = () => {
                 className="hover:bg-[#F9F8F6] dark:hover:bg-[#2A2926]/50 transition-colors"
               >
                 <td className="py-3 px-4 font-semibold text-[#1A1A18] dark:text-[#D4AF37]">
-                  <Link to={`/admin/orders/${order.id}`} className="hover:underline">
+                  <Link href={`/admin/orders/${order.id}`} className="hover:underline">
                     {order.orderNumber}
                   </Link>
                 </td>
@@ -114,7 +115,7 @@ export const RecentOrders: React.FC = () => {
                       <button
                         onClick={() => {
                           setActiveMenuId(null);
-                          navigate(`/admin/orders/${order.id}`);
+                          router.push(`/admin/orders/${order.id}`);
                         }}
                         className="w-full text-left px-2.5 py-1.5 hover:bg-[#F9F8F6] dark:hover:bg-[#2A2926] rounded-xs flex items-center gap-2 text-xs"
                       >

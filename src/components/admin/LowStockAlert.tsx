@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { AlertTriangle, ArrowRight, PackageX } from 'lucide-react';
 import { useAdmin } from '../../context/AdminContext';
 
@@ -26,7 +26,7 @@ export const LowStockAlert: React.FC = () => {
         </div>
 
         <Link
-          to="/admin/inventory"
+          href="/admin/inventory"
           className="inline-flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 bg-[#1A1A18] dark:bg-[#D4AF37] text-white dark:text-[#1A1A18] hover:opacity-90 rounded-xs transition-opacity"
         >
           <span>View Inventory</span>
