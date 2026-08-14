@@ -12,8 +12,9 @@ const AdminLayoutInner: React.FC<{ children: React.ReactNode }> = ({ children })
   return (
     <div className="min-h-screen bg-[#F9F8F6] dark:bg-[#121210] text-[#1A1A18] dark:text-[#E5E0D8] font-sans antialiased flex flex-col lg:flex-row transition-colors">
 
-      {/* Desktop Persistent Left Sidebar */}
-      <div className="hidden lg:block shrink-0">
+      {/* Desktop Persistent Left Sidebar - pinned to the viewport so it stays
+          in place while the main content scrolls */}
+      <div className="hidden lg:block shrink-0 sticky top-0 self-start h-screen">
         <AdminSidebar />
       </div>
 
@@ -24,10 +25,10 @@ const AdminLayoutInner: React.FC<{ children: React.ReactNode }> = ({ children })
             onClick={() => setIsMobileSidebarOpen(false)}
             className="fixed inset-0 bg-black/60 backdrop-blur-xs animate-in fade-in"
           />
-          <div className="relative flex-1 max-w-xs w-full bg-[#1A1A18] text-white flex flex-col shadow-2xl z-10 animate-in slide-in-from-left">
+          <div className="relative flex-1 max-w-xs w-full bg-white text-[#1A1A18] dark:bg-[#1A1A18] dark:text-white flex flex-col shadow-2xl z-10 animate-in slide-in-from-left">
             <button
               onClick={() => setIsMobileSidebarOpen(false)}
-              className="absolute top-4 right-4 p-2 text-[#8C8279] hover:text-white"
+              className="absolute top-4 right-4 z-10 p-2 text-[#8C8279] hover:text-[#1A1A18] dark:hover:text-white"
             >
               <X className="w-5 h-5" />
             </button>

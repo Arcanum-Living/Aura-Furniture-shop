@@ -101,12 +101,12 @@ export const AdminSidebar: React.FC = () => {
 
   return (
     <aside
-      className={`relative flex flex-col bg-[#1A1A18] dark:bg-[#121210] text-[#E5E0D8] border-r border-[#333230] dark:border-[#262522] transition-all duration-300 z-30 shrink-0 h-full min-h-screen ${
+      className={`relative flex flex-col bg-white dark:bg-[#121210] text-[#1A1A18] dark:text-[#E5E0D8] border-r border-[#E5E0D8] dark:border-[#262522] transition-all duration-300 z-30 shrink-0 h-full ${
         isSidebarCollapsed ? "w-20" : "w-64"
       }`}
     >
       {/* Brand Header */}
-      <div className="h-16 flex items-center justify-between px-5 border-b border-[#333230] dark:border-[#262522]">
+      <div className="h-16 flex items-center justify-between px-5 border-b border-[#E5E0D8] dark:border-[#262522] shrink-0">
         <Link
           href="/admin"
           className="flex items-center gap-3 overflow-hidden group focus:outline-hidden"
@@ -117,7 +117,7 @@ export const AdminSidebar: React.FC = () => {
           </div>
           {!isSidebarCollapsed && (
             <div className="flex flex-col">
-              <span className="font-serif italic text-lg tracking-[0.15em] text-white font-semibold">
+              <span className="font-serif italic text-lg tracking-[0.15em] text-[#1A1A18] dark:text-white font-semibold">
                 AURA
               </span>
               <span className="text-[9px] tracking-[0.3em] text-[#D4AF37] font-bold uppercase -mt-1">
@@ -129,7 +129,7 @@ export const AdminSidebar: React.FC = () => {
 
         <button
           onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
-          className="hidden lg:flex w-6 h-6 items-center justify-center rounded-xs text-[#8C8279] hover:text-white hover:bg-[#2A2926] transition-colors"
+          className="hidden lg:flex w-6 h-6 items-center justify-center rounded-xs text-[#8C8279] hover:text-[#1A1A18] hover:bg-[#F0EBE1] dark:hover:text-white dark:hover:bg-[#2A2926] transition-colors"
           title={isSidebarCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
         >
           {isSidebarCollapsed ? (
@@ -141,7 +141,7 @@ export const AdminSidebar: React.FC = () => {
       </div>
 
       {/* Nav Links */}
-      <div className="flex-1 overflow-y-auto py-4 px-3 space-y-6 scrollbar-thin scrollbar-thumb-[#333230]">
+      <div className="admin-sidebar-nav flex-1 min-h-0 overflow-y-auto py-4 px-3 space-y-6">
         {navGroups.map((group, idx) => (
           <div key={idx} className="space-y-1">
             {!isSidebarCollapsed && (
@@ -159,8 +159,8 @@ export const AdminSidebar: React.FC = () => {
                   onClick={() => setIsMobileSidebarOpen(false)}
                   className={`flex items-center gap-3 px-3 py-2.5 rounded-xs text-xs font-medium transition-all group relative ${
                     active
-                      ? "bg-[#2A2926] text-white border-l-2 border-[#D4AF37] shadow-xs"
-                      : "text-[#B0A89F] hover:bg-[#232220] hover:text-white"
+                      ? "bg-[#F0EBE1] text-[#1A1A18] dark:bg-[#2A2926] dark:text-white border-l-2 border-[#D4AF37] shadow-xs"
+                      : "text-[#6B635B] hover:bg-[#F0EBE1] hover:text-[#1A1A18] dark:text-[#B0A89F] dark:hover:bg-[#232220] dark:hover:text-white"
                   } ${isSidebarCollapsed ? "justify-center px-0" : ""}`}
                   title={isSidebarCollapsed ? item.label : undefined}
                 >
@@ -183,11 +183,11 @@ export const AdminSidebar: React.FC = () => {
       </div>
 
       {/* View Live Store */}
-      <div className="p-3 border-t border-[#333230] dark:border-[#262522]">
+      <div className="p-3 border-t border-[#E5E0D8] dark:border-[#262522] shrink-0">
         <Link
           href="/"
           target="_blank"
-          className={`flex items-center gap-2 px-3 py-2 text-xs text-[#8C8279] hover:text-white hover:bg-[#232220] rounded-xs transition-colors ${
+          className={`flex items-center gap-2 px-3 py-2 text-xs text-[#8C8279] hover:text-[#1A1A18] hover:bg-[#F0EBE1] dark:hover:text-white dark:hover:bg-[#232220] rounded-xs transition-colors ${
             isSidebarCollapsed ? "justify-center" : ""
           }`}
           title="View Live Store"
@@ -198,10 +198,10 @@ export const AdminSidebar: React.FC = () => {
       </div>
 
       {/* Admin Profile Footer */}
-      <div className="relative p-3 border-t border-[#333230] dark:border-[#262522] bg-[#141412]">
+      <div className="relative p-3 border-t border-[#E5E0D8] dark:border-[#262522] bg-[#F9F8F6] dark:bg-[#141412] shrink-0">
         <div
           onClick={() => setIsProfileOpen(!isProfileOpen)}
-          className={`flex items-center gap-3 p-2 rounded-xs cursor-pointer hover:bg-[#232220] transition-colors ${
+          className={`flex items-center gap-3 p-2 rounded-xs cursor-pointer hover:bg-[#F0EBE1] dark:hover:bg-[#232220] transition-colors ${
             isSidebarCollapsed ? "justify-center" : ""
           }`}
         >
@@ -210,7 +210,7 @@ export const AdminSidebar: React.FC = () => {
           </div>
           {!isSidebarCollapsed && (
             <div className="flex-1 min-w-0">
-              <div className="text-xs font-semibold text-white truncate flex items-center gap-1">
+              <div className="text-xs font-semibold text-[#1A1A18] dark:text-white truncate flex items-center gap-1">
                 <span>{settings.adminName}</span>
                 <ShieldCheck className="w-3 h-3 text-[#D4AF37]" />
               </div>
@@ -220,8 +220,8 @@ export const AdminSidebar: React.FC = () => {
         </div>
 
         {isProfileOpen && (
-          <div className="absolute bottom-16 left-3 right-3 bg-[#232220] border border-[#333230] rounded-xs shadow-2xl p-1.5 z-50 text-xs text-white animate-in fade-in slide-in-from-bottom-2">
-            <div className="px-3 py-2 border-b border-[#333230] mb-1">
+          <div className="absolute bottom-16 left-3 right-3 bg-white dark:bg-[#232220] border border-[#E5E0D8] dark:border-[#333230] rounded-xs shadow-2xl p-1.5 z-50 text-xs text-[#1A1A18] dark:text-white animate-in fade-in slide-in-from-bottom-2">
+            <div className="px-3 py-2 border-b border-[#E5E0D8] dark:border-[#333230] mb-1">
               <div className="font-medium truncate">{settings.adminEmail}</div>
               <div className="text-[10px] text-[#8C8279]">Role: {settings.adminRole}</div>
             </div>
@@ -230,7 +230,7 @@ export const AdminSidebar: React.FC = () => {
                 setIsProfileOpen(false);
                 router.push("/admin/settings");
               }}
-              className="w-full text-left px-3 py-2 hover:bg-[#333230] rounded-xs flex items-center gap-2 text-[#E5E0D8]"
+              className="w-full text-left px-3 py-2 hover:bg-[#F0EBE1] dark:hover:bg-[#333230] rounded-xs flex items-center gap-2 text-[#1A1A18] dark:text-[#E5E0D8]"
             >
               <User className="w-3.5 h-3.5" />
               Profile Settings
@@ -240,7 +240,7 @@ export const AdminSidebar: React.FC = () => {
                 setIsProfileOpen(false);
                 router.push("/");
               }}
-              className="w-full text-left px-3 py-2 hover:bg-rose-950/40 text-rose-400 rounded-xs flex items-center gap-2 mt-1"
+              className="w-full text-left px-3 py-2 hover:bg-rose-50 text-rose-600 dark:hover:bg-rose-950/40 dark:text-rose-400 rounded-xs flex items-center gap-2 mt-1"
             >
               <LogOut className="w-3.5 h-3.5" />
               Sign Out Admin
