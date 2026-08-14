@@ -1,15 +1,19 @@
 import React from 'react';
 import Link from 'next/link';
 import { ArrowUpRight} from 'lucide-react';
+import { Reveal, Stagger, StaggerItem, STAGGER } from '@/components/motion';
 
 export const Footer: React.FC = () => {
   return (
     <footer className="bg-[#1A1A18] text-[#F9F8F6] pt-16 pb-12 border-t border-[#1A1A18]/20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 pb-16 border-b border-[#333230]">
-          
+        <Stagger
+          gap={STAGGER.loose}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 pb-16 border-b border-[#333230]"
+        >
+
           {/* Brand Info (4 Cols) */}
-          <div className="lg:col-span-4 space-y-6">
+          <StaggerItem className="lg:col-span-4 space-y-6">
             <Link
               href="/"
               className="font-serif italic text-3xl tracking-[0.1em] text-white inline-block"
@@ -25,7 +29,7 @@ export const Footer: React.FC = () => {
   target="_blank"
   rel="noopener noreferrer"
   aria-label="Instagram"
-  className="w-10 h-10 rounded-full border border-[#44423E] flex items-center justify-center text-[#D8D0C5] hover:text-white hover:border-white transition-colors"
+  className="group w-10 h-10 rounded-full border border-[#44423E] flex items-center justify-center text-[#D8D0C5] hover:text-white hover:border-white transition-colors duration-300"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -38,6 +42,7 @@ export const Footer: React.FC = () => {
     strokeLinecap="round"
     strokeLinejoin="round"
     aria-hidden="true"
+    className="transition-transform duration-300 ease-out group-hover:scale-110"
   >
     <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
     <path d="M16 11.37a4 4 0 1 1-3.37-3.37A4 4 0 0 1 16 11.37z" />
@@ -50,9 +55,9 @@ export const Footer: React.FC = () => {
   target="_blank"
   rel="noopener noreferrer"
   aria-label="Pinterest"
-  className="w-10 h-10 rounded-full border border-[#44423E] flex items-center justify-center text-[#D8D0C5] hover:text-white hover:border-white transition-colors"
+  className="group w-10 h-10 rounded-full border border-[#44423E] flex items-center justify-center text-[#D8D0C5] hover:text-white hover:border-white transition-colors duration-300"
 >
-  <span className="text-xs font-bold font-serif">P</span>
+  <span className="text-xs font-bold font-serif transition-transform duration-300 ease-out group-hover:scale-110">P</span>
 </a>
 
 <a
@@ -60,7 +65,7 @@ export const Footer: React.FC = () => {
   target="_blank"
   rel="noopener noreferrer"
   aria-label="Facebook"
-  className="w-10 h-10 rounded-full border border-[#44423E] flex items-center justify-center text-[#D8D0C5] hover:text-white hover:border-white transition-colors"
+  className="group w-10 h-10 rounded-full border border-[#44423E] flex items-center justify-center text-[#D8D0C5] hover:text-white hover:border-white transition-colors duration-300"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -69,15 +74,16 @@ export const Footer: React.FC = () => {
     viewBox="0 0 24 24"
     fill="currentColor"
     aria-hidden="true"
+    className="transition-transform duration-300 ease-out group-hover:scale-110"
   >
     <path d="M14 8h3V4h-3c-2.8 0-5 2.2-5 5v3H6v4h3v8h4v-8h3l1-4h-4V9c0-.6.4-1 1-1z" />
   </svg>
 </a>
             </div>
-          </div>
+          </StaggerItem>
 
           {/* Shop Column (3 Cols) */}
-          <div className="lg:col-span-3 space-y-4">
+          <StaggerItem className="lg:col-span-3 space-y-4">
             <h4 className="text-xs font-medium uppercase tracking-[0.2em] text-[#D4AF37]">
               Collection
             </h4>
@@ -113,10 +119,10 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
             </ul>
-          </div>
+          </StaggerItem>
 
           {/* Support Links (2 Cols) */}
-          <div className="lg:col-span-2 space-y-4">
+          <StaggerItem className="lg:col-span-2 space-y-4">
             <h4 className="text-xs font-medium uppercase tracking-[0.2em] text-[#D4AF37]">
               Client Care
             </h4>
@@ -142,16 +148,16 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/interior-design" className="hover:text-white transition-colors flex items-center space-x-1">
+                <Link href="/interior-design" className="group hover:text-white transition-colors flex items-center space-x-1">
                   <span>Trade Program</span>
-                  <ArrowUpRight className="w-3 h-3 text-[#D4AF37]" />
+                  <ArrowUpRight className="w-3 h-3 text-[#D4AF37] transition-transform duration-300 ease-out group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                 </Link>
               </li>
             </ul>
-          </div>
+          </StaggerItem>
 
           {/* Studio Location (3 Cols) */}
-          <div className="lg:col-span-3 space-y-4">
+          <StaggerItem className="lg:col-span-3 space-y-4">
             <h4 className="text-xs font-medium uppercase tracking-[0.2em] text-[#D4AF37]">
               NYC Flagship Studio
             </h4>
@@ -165,11 +171,11 @@ export const Footer: React.FC = () => {
                 Sat–Sun: By Private Appointment
               </p>
             </div>
-          </div>
-        </div>
+          </StaggerItem>
+        </Stagger>
 
         {/* Bottom Legal & Copyright */}
-        <div className="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-[#8C8279] space-y-4 md:space-y-0">
+        <Reveal className="pt-8 flex flex-col md:flex-row items-center justify-between text-xs text-[#8C8279] space-y-4 md:space-y-0">
           <p>© 2026 AURA Design Studio LLC. All rights reserved.</p>
           <div className="flex items-center space-x-6">
             <Link href="/privacy" className="hover:text-[#D8D0C5] transition-colors">
@@ -180,7 +186,7 @@ export const Footer: React.FC = () => {
               Terms & Conditions
             </Link>
           </div>
-        </div>
+        </Reveal>
       </div>
     </footer>
   );

@@ -3,8 +3,33 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { AnimatePresence, motion } from 'motion/react';
 import { Search, Heart, ShoppingBag, Menu, X, User, LogOut, CheckCircle2 } from 'lucide-react';
 import { useShop } from '@/context/ShopContext';
+import { DURATION, EASE_OUT, HoverUnderline } from '@/components/motion';
+
+/** Shared entrance/exit for the small anchored menus hanging off the bar. */
+const dropdownMotion = {
+  initial: { opacity: 0, y: -6 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -6 },
+  transition: { duration: DURATION.fast, ease: EASE_OUT },
+};
+
+/** Count pills: a quick, weightless fade-and-settle as the number changes. */
+const badgeMotion = {
+  initial: { opacity: 0, scale: 0.8 },
+  animate: { opacity: 1, scale: 1 },
+  exit: { opacity: 0, scale: 0.8 },
+  transition: { duration: 0.2, ease: EASE_OUT },
+};
+
+const NAV_LINKS = [
+  { href: '/shop', label: 'Shop' },
+  { href: '/collections', label: 'Collections' },
+  { href: '/about', label: 'Studio' },
+  { href: '/journal', label: 'Journal' },
+];
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -36,63 +61,54 @@ export const Navbar: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    // rAF-throttled so the bar's transparent → solid crossfade stays smooth
+    // even while the browser is firing scroll events at full rate.
+    let frame = 0;
+
     const handleScroll = () => {
-      if (window.scrollY > 40) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        setIsScrolled(window.scrollY > 40);
+        frame = 0;
+      });
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   // Determine text color and background based on scroll and current route
   const navBgClass = isScrolled
-    ? 'bg-[#F9F8F6]/95 backdrop-blur-md border-b border-[#E5E0D8] py-4 shadow-xs'
+    ? 'bg-[#F9F8F6]/85 backdrop-blur-md border-b border-[#E5E0D8] py-4 shadow-md'
     : isHomePage
-    ? 'bg-transparent text-[#1A1A18] border-b border-[#E5E0D8]/60 py-5'
-    : 'bg-[#F9F8F6] border-b border-[#E5E0D8] py-5 text-[#1A1A18]';
+    ? 'bg-transparent backdrop-blur-0 text-[#1A1A18] border-b border-[#E5E0D8]/60 py-5 shadow-none'
+    : 'bg-[#F9F8F6] backdrop-blur-0 border-b border-[#E5E0D8] py-5 text-[#1A1A18] shadow-none';
 
   const textColorClass = 'text-[#1A1A18]';
   const logoColorClass = 'text-[#1A1A18]';
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out ${navBgClass}`}>
+    <header
+      className={`fixed top-0 left-0 right-0 z-40 transition-[background-color,backdrop-filter,border-color,box-shadow,padding] duration-500 ease-out ${navBgClass}`}
+    >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         <div className="flex items-center justify-between">
           
           {/* Left Nav (Desktop) */}
           <nav className="hidden md:flex items-center space-x-8 text-[11px] tracking-[0.2em] uppercase font-semibold">
-            <Link
-              href="/shop"
-              className={`${textColorClass} hover:text-[#8C8279] transition-colors relative group py-1`}
-            >
-              Shop
-              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#1A1A18] transition-all duration-300 group-hover:w-full" />
-            </Link>
-            <Link
-              href="/collections"
-              className={`${textColorClass} hover:text-[#8C8279] transition-colors relative group py-1`}
-            >
-              Collections
-              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#1A1A18] transition-all duration-300 group-hover:w-full" />
-            </Link>
-            <Link
-              href="/about"
-              className={`${textColorClass} hover:text-[#8C8279] transition-colors relative group py-1`}
-            >
-              Studio
-              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#1A1A18] transition-all duration-300 group-hover:w-full" />
-            </Link>
-            <Link
-              href="/journal"
-              className={`${textColorClass} hover:text-[#8C8279] transition-colors relative group py-1`}
-            >
-              Journal
-              <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-[#1A1A18] transition-all duration-300 group-hover:w-full" />
-            </Link>
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`${textColorClass} hover:text-[#8C8279] transition-colors py-1`}
+              >
+                <HoverUnderline>{link.label}</HoverUnderline>
+              </Link>
+            ))}
           </nav>
 
           {/* Center Brand Logo */}
@@ -120,15 +136,21 @@ export const Navbar: React.FC = () => {
             <Link
               href="/wishlist"
               aria-label="Wishlist"
-              className={`hidden sm:block ${textColorClass} hover:opacity-70 transition-opacity p-1 relative`}
+              className={`hidden sm:block ${textColorClass} hover:opacity-70 transition-opacity p-1 relative group`}
               id="nav-wishlist-btn"
             >
-              <Heart className="w-5 h-5 stroke-[1.5]" />
-              {wishlist.length > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#8C8279] text-white text-[9px] font-bold flex items-center justify-center">
-                  {wishlist.length}
-                </span>
-              )}
+              <Heart className="w-5 h-5 stroke-[1.5] transition-transform duration-300 ease-out group-hover:scale-110" />
+              <AnimatePresence>
+                {wishlist.length > 0 && (
+                  <motion.span
+                    key={wishlist.length}
+                    {...badgeMotion}
+                    className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-[#8C8279] text-white text-[9px] font-bold flex items-center justify-center"
+                  >
+                    {wishlist.length}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </Link>
 
             {/* User Account Icon / Menu */}
@@ -156,8 +178,12 @@ export const Navbar: React.FC = () => {
               )}
 
               {/* User Dropdown Menu if Logged In */}
-              {user && isUserMenuOpen && (
-                <div className="absolute right-0 mt-3 w-56 bg-white border border-[#E5E0D8] rounded-xs shadow-xl py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+              <AnimatePresence>
+                {user && isUserMenuOpen && (
+                  <motion.div
+                    {...dropdownMotion}
+                    className="absolute right-0 mt-3 w-56 origin-top bg-white border border-[#E5E0D8] rounded-xs shadow-xl py-2 z-50"
+                  >
                   <div className="px-4 py-2.5 border-b border-[#E5E0D8] bg-[#F9F8F6]">
                     <div className="flex items-center gap-1.5 text-xs font-semibold text-[#1A1A18]">
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
@@ -195,22 +221,29 @@ export const Navbar: React.FC = () => {
                       Sign Out
                     </button>
                   </div>
-                </div>
-              )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
 
             <button
               onClick={() => setIsCartOpen(true)}
               aria-label="Shopping Cart"
-              className={`${textColorClass} hover:opacity-70 transition-opacity p-1 relative focus:outline-hidden`}
+              className={`${textColorClass} hover:opacity-70 transition-opacity p-1 relative focus:outline-hidden group`}
               id="nav-cart-btn"
             >
-              <ShoppingBag className="w-5 h-5 stroke-[1.5]" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4.5 h-4.5 rounded-full bg-[#1A1A18] text-white text-[10px] font-medium flex items-center justify-center border border-white/20">
-                  {cartCount}
-                </span>
-              )}
+              <ShoppingBag className="w-5 h-5 stroke-[1.5] transition-transform duration-300 ease-out group-hover:scale-110" />
+              <AnimatePresence>
+                {cartCount > 0 && (
+                  <motion.span
+                    key={cartCount}
+                    {...badgeMotion}
+                    className="absolute -top-1 -right-1 w-4.5 h-4.5 rounded-full bg-[#1A1A18] text-white text-[10px] font-medium flex items-center justify-center border border-white/20"
+                  >
+                    {cartCount}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </button>
 
             {/* Mobile Menu Toggle Button */}

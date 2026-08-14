@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ShopProvider } from "@/context/ShopContext";
+import { MotionProvider } from "@/components/motion";
 
 export const metadata: Metadata = {
   title: "Aura Furnitures",
@@ -42,7 +43,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-[var(--bg-main)] flex flex-col transition-colors">
-        <ShopProvider>{children}</ShopProvider>
+        <MotionProvider>
+          <ShopProvider>{children}</ShopProvider>
+        </MotionProvider>
       </body>
     </html>
   );

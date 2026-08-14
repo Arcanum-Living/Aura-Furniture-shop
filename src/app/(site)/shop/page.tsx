@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { MOCK_PRODUCTS } from '@/data/products';
 import { ProductCard } from '@/components/shop/ProductCard';
+import { Reveal, Stagger, StaggerItem, STAGGER } from '@/components/motion';
 
 const ShopPageContent: React.FC = () => {
   const searchParams = useSearchParams();
@@ -138,20 +139,26 @@ const ShopPageContent: React.FC = () => {
   return (
     <div className="pt-24 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
       {/* Catalog Header */}
-      <div className="border-b border-[#E5E0D8] pb-8 space-y-3">
-        <span className="text-xs uppercase tracking-[0.3em] font-semibold text-[#8C8279]">
-          Catalog & Collection
-        </span>
+      <Stagger onMount className="border-b border-[#E5E0D8] pb-8 space-y-3">
+        <StaggerItem>
+          <span className="text-xs uppercase tracking-[0.3em] font-semibold text-[#8C8279]">
+            Catalog & Collection
+          </span>
+        </StaggerItem>
 
-        <h1 className="font-serif text-4xl sm:text-6xl text-[#1A1A18] font-medium">
-          Shop Furniture & Objects
-        </h1>
+        <StaggerItem>
+          <h1 className="font-serif text-4xl sm:text-6xl text-[#1A1A18] font-medium">
+            Shop Furniture & Objects
+          </h1>
+        </StaggerItem>
 
-        <p className="text-sm text-[#8C8279] font-light max-w-xl">
-          Thoughtfully designed artisanal pieces crafted for considered,
-          elegant interior spaces.
-        </p>
-      </div>
+        <StaggerItem>
+          <p className="text-sm text-[#8C8279] font-light max-w-xl">
+            Thoughtfully designed artisanal pieces crafted for considered,
+            elegant interior spaces.
+          </p>
+        </StaggerItem>
+      </Stagger>
 
       {/* Top Controls Bar */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 py-3 border-b border-[#E5E0D8]/60 text-xs text-[#1A1A18]">
@@ -399,23 +406,24 @@ const ShopPageContent: React.FC = () => {
             </div>
           ) : viewMode === 'grid' ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10">
-              {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
+              {filteredProducts.map((product, idx) => (
+                <ProductCard key={product.id} product={product} index={idx} />
               ))}
             </div>
           ) : (
             /* List View */
             <div className="space-y-6">
-              {filteredProducts.map((product) => (
-                <div
+              {filteredProducts.map((product, idx) => (
+                <Reveal
                   key={product.id}
-                  className="bg-white border border-[#E5E0D8] rounded-xs p-4 flex flex-col sm:flex-row gap-6 items-center"
+                  delay={Math.min(idx, 6) * STAGGER.base}
+                  className="group bg-white border border-[#E5E0D8] hover:border-[#1A1A18] transition-colors duration-500 rounded-xs p-4 flex flex-col sm:flex-row gap-6 items-center"
                 >
                   <div className="w-full sm:w-48 aspect-4/5 bg-[#F0EBE1] overflow-hidden rounded-xs shrink-0">
                     <img
                       src={product.images[0]}
                       alt={product.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                   </div>
 
@@ -452,7 +460,7 @@ const ShopPageContent: React.FC = () => {
                       </a>
                     </div>
                   </div>
-                </div>
+                </Reveal>
               ))}
             </div>
           )}
