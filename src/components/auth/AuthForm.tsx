@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
+import { Reveal, DURATION, EASE_OUT } from "@/components/motion";
 import {
   Eye,
   EyeOff,
@@ -163,13 +164,21 @@ export const AuthPage: React.FC<AuthPageProps> = ({
 
           {/* LEFT SIDE - IMAGE */}
           <section className="relative hidden lg:block min-h-[680px] overflow-hidden bg-[#1A1A18]">
-            <img
+            <motion.img
               src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=85&w=1400"
               alt="AURA luxury interior"
-              className="absolute inset-0 h-full w-full object-cover scale-105 transition-transform duration-1000 hover:scale-100"
+              initial={{ opacity: 0, scale: 1.08 }}
+              animate={{ opacity: 1, scale: 1.03 }}
+              transition={{ duration: DURATION.image, ease: EASE_OUT }}
+              className="absolute inset-0 h-full w-full object-cover"
             />
 
-            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/35 to-[#1A1A18]/90" />
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: DURATION.slow, ease: EASE_OUT }}
+              className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/35 to-[#1A1A18]/90"
+            />
 
             <div className="relative z-10 flex h-full flex-col justify-between p-8 xl:p-12 text-white">
 
@@ -228,7 +237,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
               </div>
 
               {/* Header */}
-              <div className="mb-7 space-y-2">
+              <Reveal onMount className="mb-7 space-y-2">
                 <h1 className="font-serif text-3xl font-normal tracking-tight text-[#1A1A18]">
                   {mode === "login"
                     ? "Sign in to your account"
@@ -240,10 +249,10 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                     ? "Enter your credentials below to access your saved items and orders."
                     : "Join AURA to receive bespoke consultations, wishlist sync & early releases."}
                 </p>
-              </div>
+              </Reveal>
 
               {/* Login / Signup tabs */}
-              <div className="mb-6 grid grid-cols-2 rounded-lg border border-[#E5E0D8] bg-[#ECE8E1] p-1">
+              <Reveal onMount delay={0.08} className="mb-6 grid grid-cols-2 rounded-lg border border-[#E5E0D8] bg-[#ECE8E1] p-1">
                 <button
                   type="button"
                   onClick={() => changeMode("login")}
@@ -267,7 +276,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                 >
                   Register
                 </button>
-              </div>
+              </Reveal>
 
               {/* Divider */}
               <div className="relative mb-6 flex items-center justify-center">
@@ -433,28 +442,46 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                 </AnimatePresence>
 
                 {/* Submit */}
-                <button
+                <motion.button
                   type="submit"
                   disabled={loading}
-                  className="group mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-[#1A1A18] px-4 py-3.5 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-all hover:bg-[#333230] disabled:cursor-not-allowed disabled:opacity-70"
+                  whileTap={loading ? undefined : { scale: 0.99 }}
+                  transition={{ duration: 0.15, ease: EASE_OUT }}
+                  className="group mt-5 flex w-full items-center justify-center gap-2 rounded-lg bg-[#1A1A18] px-4 py-3.5 text-xs font-semibold uppercase tracking-[0.18em] text-white transition-[background-color,opacity] duration-300 hover:bg-[#333230] disabled:cursor-not-allowed disabled:opacity-70"
                 >
-                  {loading ? (
-                    <div className="flex items-center gap-2">
-                      <CometSpinner />
-                      <span>Authenticating...</span>
-                    </div>
-                  ) : (
-                    <>
-                      <span>
-                        {mode === "login"
-                          ? "Sign In to Account"
-                          : "Create AURA Account"}
-                      </span>
+                  <AnimatePresence mode="wait" initial={false}>
+                    {loading ? (
+                      <motion.div
+                        key="loading"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2, ease: EASE_OUT }}
+                        className="flex items-center gap-2"
+                      >
+                        <CometSpinner />
+                        <span>Authenticating...</span>
+                      </motion.div>
+                    ) : (
+                      <motion.span
+                        key="idle"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.2, ease: EASE_OUT }}
+                        className="flex items-center gap-2"
+                      >
+                        <span>
+                          {mode === "login"
+                            ? "Sign In to Account"
+                            : "Create AURA Account"}
+                        </span>
 
-                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                    </>
-                  )}
-                </button>
+                        <ArrowRight className="h-4 w-4 transition-transform duration-300 ease-out group-hover:translate-x-1" />
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
               </form>
 
               {/* Terms */}

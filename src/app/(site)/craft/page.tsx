@@ -1,9 +1,16 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'motion/react';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
+import {
+  HoverArrow,
+  ImageReveal,
+  Reveal,
+  Stagger,
+  StaggerItem,
+  DURATION,
+  STAGGER,
+} from '@/components/motion';
 
 const CraftPage: React.FC = () => {
   const steps = [
@@ -42,38 +49,52 @@ const CraftPage: React.FC = () => {
   return (
     <div className="pt-24 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
       {/* Header */}
-      <div className="text-center max-w-3xl mx-auto space-y-4 border-b border-[#E5E0D8] pb-10">
-        <span className="text-xs uppercase tracking-[0.3em] font-semibold text-[#8C8279]">
-          The Artisanal Journey
-        </span>
-        <h1 className="font-serif text-4xl sm:text-6xl text-[#1A1A18] font-medium">
-          Our Craft Process
-        </h1>
-        <p className="text-sm text-[#8C8279] font-light leading-relaxed">
-          From sustainable forest timber and raw travertine quarries to precision joinery and hand finishing.
-        </p>
-      </div>
+      <Stagger
+        onMount
+        gap={STAGGER.loose}
+        className="text-center max-w-3xl mx-auto space-y-4 border-b border-[#E5E0D8] pb-10"
+      >
+        <StaggerItem>
+          <span className="text-xs uppercase tracking-[0.3em] font-semibold text-[#8C8279]">
+            The Artisanal Journey
+          </span>
+        </StaggerItem>
+        <StaggerItem duration={DURATION.slow}>
+          <h1 className="font-serif text-4xl sm:text-6xl text-[#1A1A18] font-medium">
+            Our Craft Process
+          </h1>
+        </StaggerItem>
+        <StaggerItem>
+          <p className="text-sm text-[#8C8279] font-light leading-relaxed">
+            From sustainable forest timber and raw travertine quarries to precision joinery and hand finishing.
+          </p>
+        </StaggerItem>
+      </Stagger>
 
       {/* Timeline Steps */}
       <div className="space-y-16">
         {steps.map((item, idx) => {
           const isEven = idx % 2 === 0;
           return (
-            <motion.div
+            <Reveal
               key={item.step}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-white p-8 rounded-xs border border-[#E5E0D8] shadow-xs"
+              duration={DURATION.slow}
+              className="group grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-white p-8 rounded-xs border border-[#E5E0D8] shadow-xs hover:shadow-lg transition-shadow duration-500"
             >
               <div className={`lg:col-span-6 ${isEven ? 'lg:order-1' : 'lg:order-2'}`}>
-                <div className="aspect-16/10 w-full overflow-hidden rounded-xs bg-[#F0EBE1]">
-                  <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
-                </div>
+                <ImageReveal
+                  src={item.image}
+                  alt={item.title}
+                  zoomOnHover
+                  className="aspect-16/10 w-full rounded-xs bg-[#F0EBE1]"
+                />
               </div>
 
-              <div className={`lg:col-span-6 space-y-4 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
+              <Reveal
+                direction={isEven ? 'left' : 'right'}
+                delay={0.1}
+                className={`lg:col-span-6 space-y-4 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}
+              >
                 <span className="font-serif text-3xl font-semibold text-[#D4AF37]">
                   {item.step}
                 </span>
@@ -83,21 +104,21 @@ const CraftPage: React.FC = () => {
                 <p className="text-xs sm:text-sm text-[#8C8279] font-light leading-relaxed">
                   {item.desc}
                 </p>
-              </div>
-            </motion.div>
+              </Reveal>
+            </Reveal>
           );
         })}
       </div>
 
-      <div className="text-center pt-8">
+      <Reveal className="text-center pt-8">
         <Link
         href="/shop"
-          className="inline-flex items-center space-x-2 bg-[#1A1A18] text-white hover:bg-[#333230] text-xs font-semibold uppercase tracking-[0.2em] py-4 px-8 rounded-xs transition-colors shadow-md"
+          className="group inline-flex items-center space-x-2 bg-[#1A1A18] text-white hover:bg-[#333230] text-xs font-semibold uppercase tracking-[0.2em] py-4 px-8 rounded-xs transition-colors shadow-md"
         >
           <span>Explore Handcrafted Pieces</span>
-          <ArrowRight className="w-4 h-4" />
+          <HoverArrow />
         </Link>
-      </div>
+      </Reveal>
     </div>
   );
 };
