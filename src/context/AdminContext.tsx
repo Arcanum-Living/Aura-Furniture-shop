@@ -92,14 +92,10 @@ const AdminContext = createContext<AdminContextType | undefined>(undefined);
 export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { showNotification } = useShop();
 
-  // Dark Mode State
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem('aura_admin_theme') === 'dark';
-    } catch {
-      return false;
-    }
-  });
+  // Dark Mode State. Starts light on both server and client so the first render
+  // matches the SSR markup; the real value is read after mount (see below).
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const [isThemeReady, setIsThemeReady] = useState(false);
 
   // Sidebar Layout State
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -137,19 +133,39 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [collections, setCollections] = useState<AdminCollection[]>(initialCollections);
   const [settings, setSettings] = useState(initialSettings);
 
-  // Sync dark mode class
+  // Resolve the admin theme after mount: saved preference first, otherwise the
+  // system preference. The inline script in the root layout has already applied
+  // the matching class, so this only catches state up — it causes no flash.
   useEffect(() => {
     try {
+      const saved = localStorage.getItem('aura_admin_theme');
+      setIsDarkMode(
+        saved
+          ? saved === 'dark'
+          : window.matchMedia('(prefers-color-scheme: dark)').matches
+      );
+    } catch (e) {
+      console.error('Failed to read admin theme', e);
+    }
+    setIsThemeReady(true);
+  }, []);
+
+  // Sync dark mode class + persistence, once the stored value has been read.
+  useEffect(() => {
+    if (!isThemeReady) return;
+    try {
       localStorage.setItem('aura_admin_theme', isDarkMode ? 'dark' : 'light');
-      if (isDarkMode) {
-        document.documentElement.classList.add('dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-      }
+      document.documentElement.classList.toggle('dark', isDarkMode);
     } catch (e) {
       console.error('Failed to update theme', e);
     }
-  }, [isDarkMode]);
+  }, [isDarkMode, isThemeReady]);
+
+  // Scope the theme to the admin area: drop the class when the admin tree
+  // unmounts so navigating back to the public site never renders it dark.
+  useEffect(() => {
+    return () => document.documentElement.classList.remove('dark');
+  }, []);
 
   // Sync Products to LocalStorage
   useEffect(() => {
