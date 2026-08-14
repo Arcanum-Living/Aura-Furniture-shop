@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "motion/react";
 import { X, ArrowRight, Heart, User } from "lucide-react";
 import { useShop } from "@/context/ShopContext";
+import { DURATION, EASE_OUT, Stagger, StaggerItem, STAGGER } from "@/components/motion";
 
 export const MobileMenu: React.FC = () => {
   const {
@@ -83,10 +84,10 @@ export const MobileMenu: React.FC = () => {
     <AnimatePresence>
       {isMobileMenuOpen && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -16 }}
+          transition={{ duration: DURATION.fast, ease: EASE_OUT }}
           className="fixed inset-0 z-50 bg-[#F9F8F6] flex flex-col justify-between overflow-y-auto"
         >
           {/* Header Bar */}
@@ -109,14 +110,14 @@ export const MobileMenu: React.FC = () => {
           </div>
 
           {/* Nav Items List */}
-          <div className="px-6 py-8 flex-1 flex flex-col justify-center space-y-6">
-            {menuLinks.map((link, idx) => (
-              <motion.div
-                key={link.path}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.3, delay: idx * 0.05 }}
-              >
+          <Stagger
+            onMount
+            gap={STAGGER.tight}
+            delay={0.1}
+            className="px-6 py-8 flex-1 flex flex-col justify-center space-y-6"
+          >
+            {menuLinks.map((link) => (
+              <StaggerItem key={link.path} duration={DURATION.fast}>
                 <Link
                   href={link.path}
                   className="group flex items-center justify-between py-2 text-[#1A1A18] border-b border-[#E5E0D8]/60 pb-4"
@@ -132,11 +133,11 @@ export const MobileMenu: React.FC = () => {
                     </span>
                   </div>
 
-                  <ArrowRight className="w-5 h-5 text-[#8C8279] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
+                  <ArrowRight className="w-5 h-5 text-[#8C8279] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300 ease-out" />
                 </Link>
-              </motion.div>
+              </StaggerItem>
             ))}
-          </div>
+          </Stagger>
 
           {/* Footer Quick Links inside Mobile Menu */}
           <div className="p-6 bg-[#F0EBE1] border-t border-[#E5E0D8] space-y-4">

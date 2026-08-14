@@ -84,3 +84,22 @@
   display: none;
 }
 
+/* Reduced motion.
+   Motion components are handled by <MotionProvider reducedMotion="user">; this
+   block covers the CSS side — hover zooms, transitions and smooth scrolling —
+   so the whole experience calms down together rather than half of it. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+

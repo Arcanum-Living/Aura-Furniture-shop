@@ -6,6 +6,10 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Search, X, ArrowRight, Sparkles } from 'lucide-react';
 import { useShop } from '@/context/ShopContext';
 import { MOCK_PRODUCTS } from '@/data/products';
+import { Stagger, StaggerItem, DURATION, EASE_OUT, STAGGER } from '@/components/motion';
+
+/** Beyond this many results the cascade stops growing and items land together. */
+const MAX_RESULT_STAGGER_STEPS = 8;
 
 export const SearchOverlay: React.FC = () => {
   const { isSearchOpen, setIsSearchOpen } = useShop();
@@ -55,9 +59,10 @@ export const SearchOverlay: React.FC = () => {
     <AnimatePresence>
       {isSearchOpen && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -12 }}
+          transition={{ duration: DURATION.fast, ease: EASE_OUT }}
           className="fixed inset-0 z-50 bg-[#F9F8F6]/95 backdrop-blur-md overflow-y-auto flex flex-col"
         >
           {/* Header Bar */}
@@ -98,8 +103,8 @@ export const SearchOverlay: React.FC = () => {
 
             {/* Recent Searches & Popular Suggestions if search term is empty */}
             {!searchTerm && (
-              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div>
+              <Stagger onMount gap={STAGGER.base} delay={0.1} className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                <StaggerItem>
                   <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8C8279] mb-4">
                     Recent Searches
                   </h4>
@@ -108,16 +113,16 @@ export const SearchOverlay: React.FC = () => {
                       <button
                         key={term}
                         onClick={() => handleRecentClick(term)}
-                        className="bg-[#F0EBE1] hover:bg-[#E5E0D8] text-[#1A1A18] text-xs px-4 py-2 rounded-xs transition-colors flex items-center space-x-2"
+                        className="group bg-[#F0EBE1] hover:bg-[#E5E0D8] text-[#1A1A18] text-xs px-4 py-2 rounded-xs transition-colors flex items-center space-x-2"
                       >
                         <span>{term}</span>
-                        <ArrowRight className="w-3 h-3 text-[#8C8279]" />
+                        <ArrowRight className="w-3 h-3 text-[#8C8279] transition-transform duration-300 ease-out group-hover:translate-x-0.5" />
                       </button>
                     ))}
                   </div>
-                </div>
+                </StaggerItem>
 
-                <div>
+                <StaggerItem>
                   <h4 className="text-xs font-semibold uppercase tracking-[0.2em] text-[#8C8279] mb-4">
                     Popular Collections
                   </h4>
@@ -144,8 +149,8 @@ export const SearchOverlay: React.FC = () => {
                       Solid Oak Dining Tables â†’
                     </Link>
                   </div>
-                </div>
-              </div>
+                </StaggerItem>
+              </Stagger>
             )}
 
             {/* Results Grid */}
@@ -167,7 +172,12 @@ export const SearchOverlay: React.FC = () => {
                 </div>
 
                 {searchResults.length === 0 ? (
-                  <div className="text-center py-16 space-y-3">
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: DURATION.fast, ease: EASE_OUT }}
+                    className="text-center py-16 space-y-3"
+                  >
                     <Sparkles className="w-8 h-8 text-[#8C8279] mx-auto stroke-[1.2]" />
                     <h3 className="font-serif text-2xl text-[#1A1A18]">
                       No matching pieces found
@@ -175,15 +185,25 @@ export const SearchOverlay: React.FC = () => {
                     <p className="text-xs text-[#8C8279] max-w-sm mx-auto font-light">
                       Try searching with broader terms like &ldquo;Chair&rdquo;, &ldquo;Oak&rdquo;, &ldquo;Table&rdquo;, or &ldquo;Linen&rdquo;.
                     </p>
-                  </div>
+                  </motion.div>
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-6">
-                    {searchResults.map((product) => (
-                      <Link
+                    {searchResults.map((product, idx) => (
+                      <motion.div
                         key={product.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          duration: DURATION.fast,
+                          // Capped so a long result list doesn't trail off into a queue.
+                          delay: Math.min(idx, MAX_RESULT_STAGGER_STEPS) * STAGGER.tight,
+                          ease: EASE_OUT,
+                        }}
+                      >
+                      <Link
                         href={`/shop/${product.slug}`}
                         onClick={() => setIsSearchOpen(false)}
-                        className="group flex space-x-4 p-3 bg-white hover:bg-[#F0EBE1] transition-colors rounded-xs border border-[#E5E0D8]"
+                        className="group flex h-full space-x-4 p-3 bg-white hover:bg-[#F0EBE1] transition-colors rounded-xs border border-[#E5E0D8]"
                       >
                         <div className="w-20 h-24 bg-[#F0EBE1] overflow-hidden shrink-0">
                           <img
@@ -209,6 +229,7 @@ export const SearchOverlay: React.FC = () => {
                           </span>
                         </div>
                       </Link>
+                      </motion.div>
                     ))}
                   </div>
                 )}

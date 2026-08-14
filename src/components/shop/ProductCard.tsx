@@ -2,26 +2,38 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { motion } from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
 import { Heart, Eye, Plus, Star } from 'lucide-react';
 import { Product } from '@/types';
 import { useShop } from '@/context/ShopContext';
+import { DISTANCE, DURATION, EASE_OUT, STAGGER, VIEWPORT } from '@/components/motion';
 
 interface ProductCardProps {
   product: Product;
+  /** Position within its grid — drives the stagger cadence as the row scrolls in. */
+  index?: number;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+/** Cap the cascade so items far down a long grid don't sit waiting to appear. */
+const MAX_STAGGER_STEPS = 7;
+
+export const ProductCard: React.FC<ProductCardProps> = ({ product, index = 0 }) => {
   const { addToCart, toggleWishlist, isInWishlist, setQuickViewProduct } = useShop();
   const wishlisted = isInWishlist(product.id);
+  const reduceMotion = useReducedMotion();
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: reduceMotion ? 0 : DISTANCE.md }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      className="group relative flex flex-col h-full bg-white border border-[#E5E0D8] p-4 rounded-xs hover:border-[#1A1A18] transition-colors"
+      whileHover={reduceMotion ? undefined : { y: -4 }}
+      viewport={VIEWPORT}
+      transition={{
+        duration: DURATION.base,
+        delay: Math.min(index, MAX_STAGGER_STEPS) * STAGGER.base,
+        ease: EASE_OUT,
+      }}
+      className="group relative flex flex-col h-full bg-white border border-[#E5E0D8] p-4 rounded-xs hover:border-[#1A1A18] hover:shadow-lg transition-[color,background-color,border-color,box-shadow] duration-500"
     >
       {/* Product Image Container */}
       <div className="relative aspect-4/5 w-full bg-[#F0EBE1] overflow-hidden rounded-xs border border-[#E5E0D8]/60">
@@ -40,21 +52,33 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         </div>
 
         {/* Wishlist Button */}
-        <button
+        <motion.button
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             toggleWishlist(product.id);
           }}
           aria-label={wishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
-          className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/80 backdrop-blur-xs flex items-center justify-center text-[#1A1A18] hover:bg-white transition-all shadow-xs"
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.9 }}
+          transition={{ duration: 0.2, ease: EASE_OUT }}
+          className="absolute top-3 right-3 z-10 w-9 h-9 rounded-full bg-white/80 backdrop-blur-xs flex items-center justify-center text-[#1A1A18] hover:bg-white transition-colors shadow-xs"
         >
-          <Heart
-            className={`w-4 h-4 transition-colors ${
-              wishlisted ? 'fill-[#8C8279] text-[#8C8279]' : 'text-[#1A1A18]'
-            }`}
-          />
-        </button>
+          {/* Re-keyed on state so each toggle plays its own small settle. */}
+          <motion.span
+            key={wishlisted ? 'saved' : 'unsaved'}
+            initial={{ scale: reduceMotion ? 1 : 0.7, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.25, ease: EASE_OUT }}
+            className="flex"
+          >
+            <Heart
+              className={`w-4 h-4 transition-colors duration-300 ${
+                wishlisted ? 'fill-[#8C8279] text-[#8C8279]' : 'text-[#1A1A18]'
+              }`}
+            />
+          </motion.span>
+        </motion.button>
 
         {/* Product Main Image */}
         <Link href ={`/shop/${product.slug}`} className="block w-full h-full">
