@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Tailwind v4 defaults `dark:` to prefers-color-scheme. Drive it from the
+   `.dark` class instead so the admin theme toggle controls it. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @layer base {
   :root {
     --bg-main: #F9F8F6;
@@ -8,13 +12,33 @@
     --brand-gold: #D4AF37;
     --brand-stone: #E5E0D8;
     --bg-product: #F0EBE1;
+    
+    /* Light mode scrollbar */
+    --scrollbar-track: #F9F8F6;
+    --scrollbar-thumb: #C8C2B9;
+    --scrollbar-thumb-hover: #8C8279;
+  }
+
+  html.dark {
+    --bg-main: #121210;
+    --text-dark: #E5E0D8;
+    --brand-taupe: #A89E94;
+    --brand-gold: #D4AF37;
+    --brand-stone: #333230;
+    --bg-product: #1A1A18;
+    
+    /* Dark mode scrollbar */
+    --scrollbar-track: #121210;
+    --scrollbar-thumb: #333230;
+    --scrollbar-thumb-hover: #4A4743;
   }
 
   html {
     scroll-behavior: smooth;
     font-family: 'Lato', sans-serif;
-    background-color: #F9F8F6;
-    color: #1A1A18;
+    background-color: var(--bg-main);
+    color: var(--text-dark);
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 
   h1, h2, h3, h4, .font-serif-heading {
@@ -37,14 +61,26 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #F9F8F6;
+  background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #C8C2B9;
+  background: var(--scrollbar-thumb);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #8C8279;
+  background: var(--scrollbar-thumb-hover);
 }
+
+/* Admin sidebar nav: keep it scrollable on short viewports (so no link is ever
+   unreachable) but hide the scrollbar so the sidebar reads as a fixed panel. */
+.admin-sidebar-nav {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.admin-sidebar-nav::-webkit-scrollbar {
+  display: none;
+}
+

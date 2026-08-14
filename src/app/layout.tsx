@@ -11,8 +11,25 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Admin-only theme pre-paint script - prevents flash of wrong theme.
+            Runs before first paint and applies the dark class only on /admin
+            routes, so the public site is always rendered light. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  if (!location.pathname.startsWith('/admin')) return;
+                  var theme = localStorage.getItem('aura_admin_theme');
+                  var isDark = theme ? theme === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+                  document.documentElement.classList.toggle('dark', isDark);
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
           rel="preconnect"
@@ -24,7 +41,7 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="min-h-screen bg-[#F9F8F6] flex flex-col">
+      <body className="min-h-screen bg-[var(--bg-main)] flex flex-col transition-colors">
         <ShopProvider>{children}</ShopProvider>
       </body>
     </html>
