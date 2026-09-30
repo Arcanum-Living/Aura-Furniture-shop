@@ -142,7 +142,7 @@ export const AdminProductsPage: React.FC = () => {
           <div className="bg-[#F9F8F6] dark:bg-[#2A2926] border border-[#E5E0D8] dark:border-[#333230] px-2.5 py-1.5 rounded-xs">
             <select
               value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as any)}
+              onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
               className="bg-transparent text-[#1A1A18] dark:text-white focus:outline-hidden cursor-pointer"
             >
               <option value="newest">Sort: Newest</option>

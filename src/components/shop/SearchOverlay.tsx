@@ -11,22 +11,19 @@ import { Stagger, StaggerItem, DURATION, EASE_OUT, STAGGER } from '@/components/
 /** Beyond this many results the cascade stops growing and items land together. */
 const MAX_RESULT_STAGGER_STEPS = 8;
 
-export const SearchOverlay: React.FC = () => {
-  const { isSearchOpen, setIsSearchOpen } = useShop();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [recentSearches, setRecentSearches] = useState<string[]>([
-    'BouclÃ© Chair',
-    'Travertine Table',
-    'Brass Pendant',
-    'Japandi Bed'
-  ]);
+const RECENT_SEARCHES = [
+  'Bouclé Chair',
+  'Travertine Table',
+  'Brass Pendant',
+  'Japandi Bed'
+];
 
-  // Reset search term when closed
-  useEffect(() => {
-    if (!isSearchOpen) {
-      setSearchTerm('');
-    }
-  }, [isSearchOpen]);
+/**
+ * Presence wrapper. The panel lives in its own component so each opening starts
+ * with an empty search, while the closing animation still shows the last results.
+ */
+export const SearchOverlay: React.FC = () => {
+  const { isSearchOpen } = useShop();
 
   // Lock body scroll
   useEffect(() => {
@@ -39,6 +36,14 @@ export const SearchOverlay: React.FC = () => {
       document.body.style.overflow = '';
     };
   }, [isSearchOpen]);
+
+  return <AnimatePresence>{isSearchOpen && <SearchPanel key="search-panel" />}</AnimatePresence>;
+};
+
+const SearchPanel: React.FC = () => {
+  const { setIsSearchOpen } = useShop();
+  const [searchTerm, setSearchTerm] = useState('');
+  const recentSearches = RECENT_SEARCHES;
 
   // Live filter products
   const searchResults = searchTerm.trim()
@@ -56,8 +61,6 @@ export const SearchOverlay: React.FC = () => {
   };
 
   return (
-    <AnimatePresence>
-      {isSearchOpen && (
         <motion.div
           initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -132,21 +135,21 @@ export const SearchOverlay: React.FC = () => {
                       onClick={() => setIsSearchOpen(false)}
                       className="block text-sm font-medium text-[#1A1A18] hover:text-[#8C8279] transition-colors"
                     >
-                      Living Room & Armchairs â†’
+                      Living Room & Armchairs →
                     </Link>
                     <Link
                       href="/collections/lighting"
                       onClick={() => setIsSearchOpen(false)}
                       className="block text-sm font-medium text-[#1A1A18] hover:text-[#8C8279] transition-colors"
                     >
-                      Travertine & Brass Lighting â†’
+                      Travertine & Brass Lighting →
                     </Link>
                     <Link
                       href="/collections/dining"
                       onClick={() => setIsSearchOpen(false)}
                       className="block text-sm font-medium text-[#1A1A18] hover:text-[#8C8279] transition-colors"
                     >
-                      Solid Oak Dining Tables â†’
+                      Solid Oak Dining Tables →
                     </Link>
                   </div>
                 </StaggerItem>
@@ -166,7 +169,7 @@ export const SearchOverlay: React.FC = () => {
                       onClick={() => setIsSearchOpen(false)}
                       className="text-xs font-semibold text-[#1A1A18] hover:underline uppercase tracking-wider"
                     >
-                      View all in Shop â†’
+                      View all in Shop →
                     </Link>
                   )}
                 </div>
@@ -237,7 +240,5 @@ export const SearchOverlay: React.FC = () => {
             )}
           </div>
         </motion.div>
-      )}
-    </AnimatePresence>
   );
 };

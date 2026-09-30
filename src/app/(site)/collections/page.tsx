@@ -34,7 +34,7 @@ const CollectionsPage: React.FC = () => {
         </StaggerItem>
         <StaggerItem>
           <p className="text-sm text-[#8C8279] font-light leading-relaxed">
-            Explore spatial environments curated by interior architectsâ€”where form, proportion, and organic natural materials unify into harmonious living quarters.
+            Explore spatial environments curated by interior architects—where form, proportion, and organic natural materials unify into harmonious living quarters.
           </p>
         </StaggerItem>
       </Stagger>
@@ -72,7 +72,7 @@ const CollectionsPage: React.FC = () => {
                 className={`lg:col-span-5 space-y-5 ${isEven ? 'lg:order-2' : 'lg:order-1'}`}
               >
                 <span className="text-xs uppercase tracking-[0.25em] font-semibold text-[#D4AF37]">
-                  0{idx + 1} â€” {cat.tagline}
+                  0{idx + 1} — {cat.tagline}
                 </span>
                 <h2 className="font-serif text-3xl sm:text-4xl text-[#1A1A18] font-medium">
                   {cat.name}

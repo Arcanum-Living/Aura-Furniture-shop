@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import { AdminProvider, useAdmin } from "../../context/AdminContext";
 import { AdminSidebar } from "./AdminSidebar";
 import { AdminHeader } from "./AdminHeader";
+import { ToastNotification } from "../ui/ToastNotification";
 
 const AdminLayoutInner: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isMobileSidebarOpen, setIsMobileSidebarOpen } = useAdmin();
@@ -45,6 +46,7 @@ const AdminLayoutInner: React.FC<{ children: React.ReactNode }> = ({ children })
         </main>
       </div>
 
+      <ToastNotification />
     </div>
   );
 };

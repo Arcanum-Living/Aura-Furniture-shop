@@ -1,0 +1,16 @@
+{
+  // Compiles the node:test suites with the project's own TypeScript, so the
+  // tests need no extra dependencies. Output goes to .test-dist (gitignored).
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "incremental": false,
+    "outDir": ".test-dist",
+    "rootDir": ".",
+    "module": "commonjs",
+    "moduleResolution": "node10",
+    "jsx": "react-jsx",
+    "plugins": []
+  },
+  "include": ["tests/**/*.ts"]
+}

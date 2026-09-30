@@ -1,3 +1,5 @@
+'use client';
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
   AdminProduct,
@@ -21,6 +23,30 @@ import {
   initialSettings,
 } from '../data/adminMockData';
 import { useShop } from './ShopContext';
+import { createPersistedStore, jsonCodec, usePersistedStore } from '@/lib/persistedStore';
+
+const isArray = <T,>(value: unknown): value is T[] => Array.isArray(value);
+
+// Hydration-safe localStorage stores: the server and the hydration render use the
+// seed data, then the browser switches to whatever the admin saved.
+const adminProductsStore = createPersistedStore<AdminProduct[]>(
+  'aura_admin_products',
+  initialProducts,
+  jsonCodec<AdminProduct[]>(initialProducts, isArray<AdminProduct>)
+);
+const adminOrdersStore = createPersistedStore<AdminOrder[]>(
+  'aura_admin_orders',
+  initialOrders,
+  jsonCodec<AdminOrder[]>(initialOrders, isArray<AdminOrder>)
+);
+
+// Stored as a plain 'dark' / 'light' string because the pre-paint script in the
+// root layout reads the same key. No saved value means "follow the system".
+const adminThemeStore = createPersistedStore<boolean>('aura_admin_theme', false, {
+  parse: (raw) =>
+    raw ? raw === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches,
+  serialize: (isDark) => (isDark ? 'dark' : 'light'),
+});
 
 interface AdminContextType {
   // Theme & Layout
@@ -92,10 +118,8 @@ const AdminContext = createContext<AdminContextType | undefined>(undefined);
 export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { showNotification } = useShop();
 
-  // Dark Mode State. Starts light on both server and client so the first render
-  // matches the SSR markup; the real value is read after mount (see below).
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
-  const [isThemeReady, setIsThemeReady] = useState(false);
+  // Dark mode: light during SSR and hydration, then the saved/system value.
+  const isDarkMode = usePersistedStore(adminThemeStore);
 
   // Sidebar Layout State
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
@@ -106,23 +130,11 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [globalSearchQuery, setGlobalSearchQuery] = useState('');
 
   // Data Collections
-  const [products, setProducts] = useState<AdminProduct[]>(() => {
-    try {
-      const saved = localStorage.getItem('aura_admin_products');
-      return saved ? JSON.parse(saved) : initialProducts;
-    } catch {
-      return initialProducts;
-    }
-  });
+  const products = usePersistedStore(adminProductsStore);
+  const setProducts = adminProductsStore.set;
 
-  const [orders, setOrders] = useState<AdminOrder[]>(() => {
-    try {
-      const saved = localStorage.getItem('aura_admin_orders');
-      return saved ? JSON.parse(saved) : initialOrders;
-    } catch {
-      return initialOrders;
-    }
-  });
+  const orders = usePersistedStore(adminOrdersStore);
+  const setOrders = adminOrdersStore.set;
 
   const [categories, setCategories] = useState<AdminCategory[]>(initialCategories);
   const [customers] = useState<AdminCustomer[]>(initialCustomers);
@@ -133,33 +145,12 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [collections, setCollections] = useState<AdminCollection[]>(initialCollections);
   const [settings, setSettings] = useState(initialSettings);
 
-  // Resolve the admin theme after mount: saved preference first, otherwise the
-  // system preference. The inline script in the root layout has already applied
-  // the matching class, so this only catches state up — it causes no flash.
+  // Apply the theme class. It reads the store directly rather than `isDarkMode`,
+  // so the light hydration snapshot never strips the class the pre-paint script
+  // already applied. `isDarkMode` is a dependency so toggles and other tabs re-run it.
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('aura_admin_theme');
-      setIsDarkMode(
-        saved
-          ? saved === 'dark'
-          : window.matchMedia('(prefers-color-scheme: dark)').matches
-      );
-    } catch (e) {
-      console.error('Failed to read admin theme', e);
-    }
-    setIsThemeReady(true);
-  }, []);
-
-  // Sync dark mode class + persistence, once the stored value has been read.
-  useEffect(() => {
-    if (!isThemeReady) return;
-    try {
-      localStorage.setItem('aura_admin_theme', isDarkMode ? 'dark' : 'light');
-      document.documentElement.classList.toggle('dark', isDarkMode);
-    } catch (e) {
-      console.error('Failed to update theme', e);
-    }
-  }, [isDarkMode, isThemeReady]);
+    document.documentElement.classList.toggle('dark', adminThemeStore.get());
+  }, [isDarkMode]);
 
   // Scope the theme to the admin area: drop the class when the admin tree
   // unmounts so navigating back to the public site never renders it dark.
@@ -167,25 +158,7 @@ export const AdminProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return () => document.documentElement.classList.remove('dark');
   }, []);
 
-  // Sync Products to LocalStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('aura_admin_products', JSON.stringify(products));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [products]);
-
-  // Sync Orders to LocalStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('aura_admin_orders', JSON.stringify(orders));
-    } catch (e) {
-      console.error(e);
-    }
-  }, [orders]);
-
-  const toggleDarkMode = () => setIsDarkMode((prev) => !prev);
+  const toggleDarkMode = () => adminThemeStore.set((prev) => !prev);
 
   // Product CRUD
   const addProduct = (newProd: Omit<AdminProduct, 'id' | 'createdAt' | 'updatedAt' | 'salesCount' | 'revenue'>) => {

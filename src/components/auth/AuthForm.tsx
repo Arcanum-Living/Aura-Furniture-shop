@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, { useState } from "react";
 import Link from "next/link";
@@ -390,7 +390,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                           id="password"
                           type={showPassword ? "text" : "password"}
                           required
-                          placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                          placeholder="••••••••"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           className="w-full rounded-lg border border-[#E5E0D8] bg-white py-3 pl-10 pr-10 text-sm text-[#1A1A18] outline-none transition-colors placeholder:text-[#8C8279]/60 focus:border-[#1A1A18]"
@@ -487,19 +487,19 @@ export const AuthPage: React.FC<AuthPageProps> = ({
               {/* Terms */}
               <p className="mt-6 text-center text-[10px] leading-relaxed text-[#8C8279]">
                 By continuing, you agree to AURA&apos;s{" "}
-                <a
-                  href="#"
+                <Link
+                  href="/terms"
                   className="underline hover:text-[#1A1A18]"
                 >
                   Terms of Service
-                </a>{" "}
+                </Link>{" "}
                 and{" "}
-                <a
-                  href="#"
+                <Link
+                  href="/privacy"
                   className="underline hover:text-[#1A1A18]"
                 >
                   Privacy Policy
-                </a>
+                </Link>
                 .
               </p>
             </div>

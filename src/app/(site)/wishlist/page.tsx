@@ -17,7 +17,7 @@ import {
 } from '@/components/motion';
 
 const WishlistPage: React.FC = () => {
-  const { wishlist, toggleWishlist, addToCart } = useShop();
+  const { wishlist, toggleWishlist, removeFromWishlist, addToCart } = useShop();
 
   const wishlistedProducts = MOCK_PRODUCTS.filter((p) => wishlist.includes(p.id));
 
@@ -117,7 +117,10 @@ const WishlistPage: React.FC = () => {
                 </div>
 
                 <button
-                  onClick={() => addToCart(product, 1)}
+                  onClick={() => {
+                    addToCart(product, 1);
+                    removeFromWishlist(product.id);
+                  }}
                   className="group/btn w-full bg-[#1A1A18] hover:bg-[#333230] text-white text-xs font-semibold uppercase tracking-wider py-2.5 rounded-xs flex items-center justify-center space-x-2 transition-colors"
                 >
                   <ShoppingBag className="w-3.5 h-3.5 transition-transform duration-300 ease-out group-hover/btn:-translate-y-0.5" />
