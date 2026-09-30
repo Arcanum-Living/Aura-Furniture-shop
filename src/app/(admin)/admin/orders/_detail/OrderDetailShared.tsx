@@ -22,7 +22,9 @@ export const AdminOrderDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { orders, updateOrderStatus } = useAdmin();
 
-  const order = orders.find((o) => o.id === id) || orders[0];
+  // The route's server page.tsx has already 404'd unknown IDs.
+  const order = orders.find((o) => o.id === id);
+  if (!order) return null;
 
   const handleStatusSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     updateOrderStatus(order.id, e.target.value as AdminOrder['status']);

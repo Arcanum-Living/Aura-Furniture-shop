@@ -1,65 +1,97 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter, useParams } from 'next/navigation';
 import { ArrowLeft, Save, Upload, Sparkles, Check, Image as ImageIcon } from 'lucide-react';
 import { useAdmin } from '@/context/AdminContext';
+import type { AdminProduct } from '@/data/adminMockData';
+import { useHydrated } from '@/lib/persistedStore';
 
 export const AdminProductFormPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const router = useRouter();
-  const { products, addProduct, updateProduct, categories } = useAdmin();
+  const { products } = useAdmin();
+  // Wait for the browser's saved products so the form never starts from stale seed data.
+  const hydrated = useHydrated();
+
+  if (!hydrated) return null;
 
   const isEditing = Boolean(id && id !== 'new');
-  const existingProduct = isEditing ? products.find((p) => p.id === id) : null;
+  const existingProduct = isEditing ? products.find((p) => p.id === id) : undefined;
 
-  // Form State
-  const [formData, setFormData] = useState({
-    name: '',
-    slug: '',
-    category: 'Living',
-    subcategory: 'Seating',
-    price: 1200,
-    compareAtPrice: 1400,
-    sku: 'AURA-NEW-01',
-    stock: 10,
-    lowStockThreshold: 5,
-    status: 'Published' as 'Published' | 'Draft' | 'Out of Stock',
-    isFeatured: false,
-    isNewArrival: true,
-    material: 'Belgian Linen & Solid Walnut',
-    color: 'Warm Cream',
-    dimensions: '30"W x 32"D x 30"H',
-    weight: '22 kg',
-    description: 'Masterfully crafted furniture piece designed for modern living spaces.',
-    image: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&q=80&w=600',
-  });
+  if (isEditing && !existingProduct) {
+    return (
+      <div className="space-y-4 max-w-5xl mx-auto py-12 text-center">
+        <h1 className="font-serif text-2xl font-normal text-[#1A1A18] dark:text-white">
+          Product not found
+        </h1>
+        <p className="text-xs text-[#8C8279] dark:text-[#A0988E]">
+          No product exists with the ID &ldquo;{id}&rdquo;.
+        </p>
+        <Link
+          href="/admin/products"
+          className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#1A1A18] dark:bg-[#D4AF37] text-white dark:text-[#1A1A18] text-xs font-semibold rounded-xs hover:opacity-90 transition-opacity"
+        >
+          <ArrowLeft className="w-3.5 h-3.5" />
+          <span>Back to Products</span>
+        </Link>
+      </div>
+    );
+  }
 
-  useEffect(() => {
-    if (existingProduct) {
-      setFormData({
-        name: existingProduct.name,
-        slug: existingProduct.slug,
-        category: existingProduct.category,
-        subcategory: existingProduct.subcategory || '',
-        price: existingProduct.price,
-        compareAtPrice: existingProduct.compareAtPrice || 0,
-        sku: existingProduct.sku,
-        stock: existingProduct.stock,
-        lowStockThreshold: existingProduct.lowStockThreshold,
-        status: existingProduct.status,
-        isFeatured: existingProduct.isFeatured,
-        isNewArrival: existingProduct.isNewArrival,
-        material: existingProduct.material,
-        color: existingProduct.color,
-        dimensions: existingProduct.dimensions,
-        weight: existingProduct.weight,
-        description: existingProduct.description,
-        image: existingProduct.image,
-      });
-    }
-  }, [existingProduct]);
+  return <ProductForm key={existingProduct?.id ?? 'new'} existingProduct={existingProduct} />;
+};
+
+const ProductForm: React.FC<{ existingProduct?: AdminProduct }> = ({ existingProduct }) => {
+  const router = useRouter();
+  const { addProduct, updateProduct, categories } = useAdmin();
+  const isEditing = Boolean(existingProduct);
+  const id = existingProduct?.id;
+
+  // Form State: starts from the saved product when editing, otherwise sensible defaults.
+  const [formData, setFormData] = useState(() =>
+    existingProduct
+      ? {
+          name: existingProduct.name,
+          slug: existingProduct.slug,
+          category: existingProduct.category,
+          subcategory: existingProduct.subcategory || '',
+          price: existingProduct.price,
+          compareAtPrice: existingProduct.compareAtPrice || 0,
+          sku: existingProduct.sku,
+          stock: existingProduct.stock,
+          lowStockThreshold: existingProduct.lowStockThreshold,
+          status: existingProduct.status,
+          isFeatured: existingProduct.isFeatured,
+          isNewArrival: existingProduct.isNewArrival,
+          material: existingProduct.material,
+          color: existingProduct.color,
+          dimensions: existingProduct.dimensions,
+          weight: existingProduct.weight,
+          description: existingProduct.description,
+          image: existingProduct.image,
+        }
+      : {
+          name: '',
+          slug: '',
+          category: 'Living',
+          subcategory: 'Seating',
+          price: 1200,
+          compareAtPrice: 1400,
+          sku: 'AURA-NEW-01',
+          stock: 10,
+          lowStockThreshold: 5,
+          status: 'Published' as 'Published' | 'Draft' | 'Out of Stock',
+          isFeatured: false,
+          isNewArrival: true,
+          material: 'Belgian Linen & Solid Walnut',
+          color: 'Warm Cream',
+          dimensions: '30"W x 32"D x 30"H',
+          weight: '22 kg',
+          description: 'Masterfully crafted furniture piece designed for modern living spaces.',
+          image: 'https://images.unsplash.com/photo-1567538096630-e0c55bd6374c?auto=format&fit=crop&q=80&w=600',
+        }
+  );
 
   // Auto slugify name
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -336,7 +368,7 @@ export const AdminProductFormPage: React.FC = () => {
                 </label>
                 <select
                   value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value as AdminProduct['status'] })}
                   className="w-full px-3 py-2 bg-[#F9F8F6] dark:bg-[#2A2926] border border-[#E5E0D8] dark:border-[#333230] rounded-xs text-[#1A1A18] dark:text-white focus:outline-hidden"
                 >
                   <option value="Published">Published (Active on Store)</option>

@@ -160,7 +160,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, index = 0 }) 
             )}
           </div>
           <span className="text-[11px] text-[#8C8279] tracking-wider uppercase font-light">
-            {product.leadTime?.split('â€”')[0] || 'In Stock'}
+            {product.leadTime?.split('—')[0] || 'In Stock'}
           </span>
         </div>
       </div>

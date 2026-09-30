@@ -1,4 +1,4 @@
-﻿import { Product, ProductReview } from '@/types';
+import { Product, ProductReview } from '@/types';
 
 export const MOCK_PRODUCTS: Product[] = [
   {
@@ -9,10 +9,10 @@ export const MOCK_PRODUCTS: Product[] = [
     subcategory: 'Chairs & Armchairs',
     price: 1250,
     originalPrice: 1400,
-    description: 'Sculptural lounge chair featuring soft ivory bouclÃ© upholstery and solid white oak frame with sculpted organic curves.',
-    longDescription: 'The Klova Lounge Chair balances arch architectural proportions with inviting softness. Crafted with solid kiln-dried white oak and upholstered in high-density tactile bouclÃ© wool-blend fabric, it creates an anchor of calm sophistication in contemporary living spaces.',
-    material: 'Ivory BouclÃ© & Solid Oak',
-    materialsList: ['Solid Kiln-Dried White Oak', 'Textured BouclÃ© Fabric (80% Wool, 20% Acrylic)', 'High-Density Memory Foam Cushioning'],
+    description: 'Sculptural lounge chair featuring soft ivory bouclé upholstery and solid white oak frame with sculpted organic curves.',
+    longDescription: 'The Klova Lounge Chair balances arch architectural proportions with inviting softness. Crafted with solid kiln-dried white oak and upholstered in high-density tactile bouclé wool-blend fabric, it creates an anchor of calm sophistication in contemporary living spaces.',
+    material: 'Ivory Bouclé & Solid Oak',
+    materialsList: ['Solid Kiln-Dried White Oak', 'Textured Bouclé Fabric (80% Wool, 20% Acrylic)', 'High-Density Memory Foam Cushioning'],
     color: 'Ivory / Natural Oak',
     availableColors: [
       { name: 'Ivory', hex: '#F4F1EA' },
@@ -31,7 +31,7 @@ export const MOCK_PRODUCTS: Product[] = [
     newArrival: true,
     inStock: true,
     designer: 'Studio Studio K&O',
-    leadTime: 'In stock â€” Ships in 3â€“5 business days',
+    leadTime: 'In stock — Ships in 3–5 business days',
     careInstructions: 'Spot clean with mild water-free solvent. Professional cleaning recommended for deep stains. Vacuum periodically with soft brush attachment.'
   },
   {
@@ -62,7 +62,7 @@ export const MOCK_PRODUCTS: Product[] = [
     newArrival: false,
     inStock: true,
     designer: 'Henrik Vane',
-    leadTime: 'In stock â€” Ships in 2â€“4 business days',
+    leadTime: 'In stock — Ships in 2–4 business days',
     careInstructions: 'Wipe with soft, slightly damp cloth. Avoid harsh abrasive cleaners or prolonged exposure to direct moisture.'
   },
   {
@@ -92,7 +92,7 @@ export const MOCK_PRODUCTS: Product[] = [
     newArrival: true,
     inStock: true,
     designer: 'Maren Lind',
-    leadTime: 'In stock â€” Ships in 2 days',
+    leadTime: 'In stock — Ships in 2 days',
     careInstructions: 'Dust gently with dry microfiber cloth. Do not use metal polishes on sealed brass surfaces.'
   },
   {
@@ -123,7 +123,7 @@ export const MOCK_PRODUCTS: Product[] = [
     newArrival: false,
     inStock: true,
     designer: 'AURA Atelier',
-    leadTime: 'White-glove delivery in 1â€“2 weeks',
+    leadTime: 'White-glove delivery in 1–2 weeks',
     careInstructions: 'Wipe spills immediately. Use stone-safe ph-neutral cleaners only. Always use coasters.'
   },
   {
@@ -154,7 +154,7 @@ export const MOCK_PRODUCTS: Product[] = [
     newArrival: true,
     inStock: true,
     designer: 'Elena Vance',
-    leadTime: 'White-glove delivery in 2â€“3 weeks',
+    leadTime: 'White-glove delivery in 2–3 weeks',
     careInstructions: 'Fluff cushions regularly. Removable slipcovers are dry-cleanable.'
   },
   {
@@ -214,7 +214,7 @@ export const MOCK_PRODUCTS: Product[] = [
     newArrival: false,
     inStock: true,
     designer: 'AURA Studio',
-    leadTime: 'Ships in 10â€“14 business days',
+    leadTime: 'Ships in 10–14 business days',
     careInstructions: 'Clean with damp cloth and dry immediately. Use table mats for hot dishes.'
   },
   {
@@ -244,7 +244,7 @@ export const MOCK_PRODUCTS: Product[] = [
     newArrival: true,
     inStock: true,
     designer: 'Lucas Dubois',
-    leadTime: 'Ships in 3â€“5 business days',
+    leadTime: 'Ships in 3–5 business days',
     careInstructions: 'Ensure power is off before cleaning glass with mild glass spray and microfiber towel.'
   },
   {
@@ -274,7 +274,7 @@ export const MOCK_PRODUCTS: Product[] = [
     newArrival: false,
     inStock: true,
     designer: 'Marcus Thorne',
-    leadTime: 'In stock â€” Ships in 5 days',
+    leadTime: 'In stock — Ships in 5 days',
     careInstructions: 'Condition leather twice yearly with balm. Wipe wood surface with damp cloth.'
   },
   {
@@ -305,7 +305,7 @@ export const MOCK_PRODUCTS: Product[] = [
     newArrival: true,
     inStock: true,
     designer: 'Isabella Rossi',
-    leadTime: 'In stock â€” Ships tomorrow',
+    leadTime: 'In stock — Ships tomorrow',
     careInstructions: 'Hand wash only with warm soapy water.'
   },
   {
@@ -335,7 +335,7 @@ export const MOCK_PRODUCTS: Product[] = [
     newArrival: false,
     inStock: true,
     designer: 'AURA Atelier',
-    leadTime: 'Fragile freight shipment in 5â€“7 days',
+    leadTime: 'Fragile freight shipment in 5–7 days',
     careInstructions: 'Clean mirror glass with ammonia-free glass cleaner sprayed onto microfiber cloth.'
   },
   {
@@ -365,7 +365,7 @@ export const MOCK_PRODUCTS: Product[] = [
     newArrival: false,
     inStock: true,
     designer: 'Craft Guild Jaipur',
-    leadTime: 'In stock â€” Ships in 4 days',
+    leadTime: 'In stock — Ships in 4 days',
     careInstructions: 'Vacuum without beater bar. Rotate annually for even wear. Professional rug clean recommended.'
   },
   {
@@ -413,7 +413,7 @@ export const MOCK_PRODUCTS: Product[] = [
     availableColors: [
       { name: 'Sage Moss', hex: '#7A8472' },
       { name: 'Warm Amber', hex: '#C28340' },
-      { name: 'EcrÃº', hex: '#EBE3D5' }
+      { name: 'Ecrú', hex: '#EBE3D5' }
     ],
     dimensions: '20" Diameter x 17"H',
     images: [
@@ -426,7 +426,7 @@ export const MOCK_PRODUCTS: Product[] = [
     newArrival: false,
     inStock: true,
     designer: 'Camilla Moreau',
-    leadTime: 'In stock â€” Ships in 2 days',
+    leadTime: 'In stock — Ships in 2 days',
     careInstructions: 'Brush velvet gently in direction of nap with soft velvet brush.'
   },
   {
@@ -455,7 +455,7 @@ export const MOCK_PRODUCTS: Product[] = [
     newArrival: true,
     inStock: true,
     designer: 'Maren Lind',
-    leadTime: 'In stock â€” Ships in 3â€“5 days',
+    leadTime: 'In stock — Ships in 3–5 days',
     careInstructions: 'Dust stem and shade with dry cloth. Do not apply acidic cleaners to marble.'
   },
   {
@@ -486,7 +486,7 @@ export const MOCK_PRODUCTS: Product[] = [
     newArrival: false,
     inStock: true,
     designer: 'AURA Home',
-    leadTime: 'In stock â€” Ships tomorrow',
+    leadTime: 'In stock — Ships tomorrow',
     careInstructions: 'Machine wash on gentle cycle with cold water. Tumble dry low or line dry.'
   }
 ];
@@ -498,7 +498,7 @@ export const MOCK_REVIEWS: ProductReview[] = [
     rating: 5,
     date: 'October 14, 2025',
     title: 'An absolute masterpiece of comfort and design',
-    comment: 'The Klova chair exceeded my expectations. The bouclÃ© fabric feels incredibly rich and soft, and the solid oak construction is solid as a rock. It instantly elevated our living room space.',
+    comment: 'The Klova chair exceeded my expectations. The bouclé fabric feels incredibly rich and soft, and the solid oak construction is solid as a rock. It instantly elevated our living room space.',
     verifiedPurchase: true
   },
   {

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Plus, Minus, Trash2, ShoppingBag } from 'lucide-react';
 import { useShop } from '@/context/ShopContext';
+import { getCartLineKey } from '@/lib/cart';
 import { AnimatedValue, HoverArrow, DURATION, EASE_IN_OUT, EASE_OUT } from '@/components/motion';
 
 export const CartDrawer: React.FC = () => {
@@ -73,7 +74,7 @@ export const CartDrawer: React.FC = () => {
                       transition={{ duration: DURATION.fast, ease: EASE_OUT }}
                       className="text-xs text-[#1A1A18] font-medium tracking-wide text-center"
                     >
-                      âœ¨ Congratulations! You unlocked <span className="font-semibold text-[#8C8279]">Complimentary White Glove Delivery</span>.
+                      ✨ Congratulations! You unlocked <span className="font-semibold text-[#8C8279]">Complimentary White Glove Delivery</span>.
                     </motion.p>
                   ) : (
                     <motion.div
@@ -129,7 +130,7 @@ export const CartDrawer: React.FC = () => {
                   <AnimatePresence initial={false} mode="popLayout">
                   {cart.map((item) => (
                     <motion.div
-                      key={item.product.id}
+                      key={getCartLineKey(item)}
                       layout
                       initial={{ opacity: 0, x: 24 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -162,7 +163,7 @@ export const CartDrawer: React.FC = () => {
                               {item.product.name}
                             </Link>
                             <motion.button
-                              onClick={() => removeFromCart(item.product.id)}
+                              onClick={() => removeFromCart(getCartLineKey(item))}
                               whileHover={{ scale: 1.1 }}
                               whileTap={{ scale: 0.9 }}
                               transition={{ duration: 0.2, ease: EASE_OUT }}
@@ -181,7 +182,7 @@ export const CartDrawer: React.FC = () => {
                         <div className="flex items-center justify-between pt-2">
                           <div className="flex items-center border border-[#E5E0D8] bg-white rounded-xs">
                             <motion.button
-                              onClick={() => updateQuantity(item.product.id, -1)}
+                              onClick={() => updateQuantity(getCartLineKey(item), -1)}
                               whileTap={{ scale: 0.9 }}
                               transition={{ duration: 0.15, ease: EASE_OUT }}
                               className="p-1.5 text-[#1A1A18] hover:bg-[#F0EBE1] transition-colors"
@@ -194,7 +195,7 @@ export const CartDrawer: React.FC = () => {
                               className="px-3 text-xs font-semibold text-[#1A1A18]"
                             />
                             <motion.button
-                              onClick={() => updateQuantity(item.product.id, 1)}
+                              onClick={() => updateQuantity(getCartLineKey(item), 1)}
                               whileTap={{ scale: 0.9 }}
                               transition={{ duration: 0.15, ease: EASE_OUT }}
                               className="p-1.5 text-[#1A1A18] hover:bg-[#F0EBE1] transition-colors"
