@@ -1,6 +1,14 @@
-﻿'use client'
-import React, { createContext, useContext, useState, useEffect } from 'react';
+'use client'
+import React, { createContext, useContext, useState, useRef } from 'react';
 import { Product, CartItem } from '@/types';
+import {
+  addCartItem,
+  getCartCount,
+  getCartSubtotal,
+  removeCartItem,
+  updateCartItemQuantity,
+} from '@/lib/cart';
+import { createPersistedStore, jsonCodec, usePersistedStore } from '@/lib/persistedStore';
 
 export interface User {
   name: string;
@@ -12,98 +20,88 @@ interface ShopContextType {
   user: User | null;
   loginUser: (email: string, name?: string) => void;
   logoutUser: () => void;
-  
+
   cart: CartItem[];
   addToCart: (product: Product, quantity?: number, selectedColor?: string) => void;
-  removeFromCart: (productId: string) => void;
-  updateQuantity: (productId: string, delta: number) => void;
+  /** `lineKey` comes from `getCartLineKey(item)` — one product in one colour. */
+  removeFromCart: (lineKey: string) => void;
+  updateQuantity: (lineKey: string, delta: number) => void;
   clearCart: () => void;
   cartCount: number;
   cartSubtotal: number;
-  
+
   wishlist: string[]; // product IDs
   toggleWishlist: (productId: string) => void;
+  removeFromWishlist: (productId: string) => void;
   isInWishlist: (productId: string) => boolean;
-  
+
   isCartOpen: boolean;
   setIsCartOpen: (open: boolean) => void;
-  
+
   isSearchOpen: boolean;
   setIsSearchOpen: (open: boolean) => void;
-  
+
   isMobileMenuOpen: boolean;
   setIsMobileMenuOpen: (open: boolean) => void;
-  
+
   quickViewProduct: Product | null;
   setQuickViewProduct: (product: Product | null) => void;
 
   notificationMessage: string | null;
   showNotification: (msg: string) => void;
-
-  isPageLoading: boolean;
-  setIsPageLoading: (loading: boolean) => void;
-  triggerPageLoading: (durationMs?: number) => void;
 }
+
+const isObject = (value: unknown): value is Record<string, unknown> =>
+  typeof value === 'object' && value !== null;
+
+const isUser = (value: unknown): value is User | null =>
+  value === null ||
+  (isObject(value) && typeof value.name === 'string' && typeof value.email === 'string');
+
+const isCart = (value: unknown): value is CartItem[] =>
+  Array.isArray(value) &&
+  value.every(
+    (item) =>
+      isObject(item) &&
+      typeof item.quantity === 'number' &&
+      isObject(item.product) &&
+      typeof item.product.id === 'string' &&
+      typeof item.product.price === 'number'
+  );
+
+const isStringArray = (value: unknown): value is string[] =>
+  Array.isArray(value) && value.every((id) => typeof id === 'string');
+
+// Module-level stores: read from localStorage only in the browser, after hydration.
+const userStore = createPersistedStore<User | null>('aura_user', null, jsonCodec<User | null>(null, isUser));
+const cartStore = createPersistedStore<CartItem[]>('aura_cart', [], jsonCodec<CartItem[]>([], isCart));
+const wishlistStore = createPersistedStore<string[]>('aura_wishlist', [], jsonCodec<string[]>([], isStringArray));
+
+const NOTIFICATION_DURATION_MS = 3000;
 
 const ShopContext = createContext<ShopContextType | undefined>(undefined);
 
 export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(() => {
-    if (typeof window === 'undefined') return null;
-    try {
-      const saved = localStorage.getItem('aura_user');
-      return saved ? JSON.parse(saved) : null;
-    } catch {
-      return null;
-    }
-  });
-
-  const [cart, setCart] = useState<CartItem[]>(() => {
-    if (typeof window === 'undefined') return [];
-    try {
-      const saved = localStorage.getItem('aura_cart');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  const [wishlist, setWishlist] = useState<string[]>(() => {
-    if (typeof window === 'undefined') return ['prod-1', 'prod-3'];
-    try {
-      const saved = localStorage.getItem('aura_wishlist');
-      return saved ? JSON.parse(saved) : ['prod-1', 'prod-3']; // Default sample items
-    } catch {
-      return ['prod-1', 'prod-3'];
-    }
-  });
+  const user = usePersistedStore(userStore);
+  const cart = usePersistedStore(cartStore);
+  const wishlist = usePersistedStore(wishlistStore);
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
   const [notificationMessage, setNotificationMessage] = useState<string | null>(null);
-  const [isPageLoading, setIsPageLoading] = useState<boolean>(true);
+  const notificationTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const triggerPageLoading = (durationMs: number = 600) => {
-    setIsPageLoading(true);
-    setTimeout(() => {
-      setIsPageLoading(false);
-    }, durationMs);
+  const showNotification = (msg: string) => {
+    // Restart the timer so an older toast's timeout can't hide a newer message early.
+    if (notificationTimer.current) clearTimeout(notificationTimer.current);
+    setNotificationMessage(msg);
+    notificationTimer.current = setTimeout(() => {
+      setNotificationMessage(null);
+      notificationTimer.current = null;
+    }, NOTIFICATION_DURATION_MS);
   };
-
-  // Sync user to LocalStorage
-  useEffect(() => {
-    try {
-      if (user) {
-        localStorage.setItem('aura_user', JSON.stringify(user));
-      } else {
-        localStorage.removeItem('aura_user');
-      }
-    } catch (e) {
-      console.error('Failed to sync user to localStorage', e);
-    }
-  }, [user]);
 
   const loginUser = (email: string, name?: string) => {
     const formattedName = name || email.split('@')[0].replace('.', ' ');
@@ -112,93 +110,50 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
       name: formattedName.charAt(0).toUpperCase() + formattedName.slice(1),
       avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200'
     };
-    setUser(newUser);
+    userStore.set(newUser);
     showNotification(`Welcome back, ${newUser.name}`);
   };
 
   const logoutUser = () => {
-    setUser(null);
+    userStore.set(null);
     showNotification('Logged out successfully');
   };
 
-  // Sync cart to LocalStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('aura_cart', JSON.stringify(cart));
-    } catch (e) {
-      console.error('Failed to save cart to localStorage', e);
-    }
-  }, [cart]);
-
-  // Sync wishlist to LocalStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem('aura_wishlist', JSON.stringify(wishlist));
-    } catch (e) {
-      console.error('Failed to save wishlist to localStorage', e);
-    }
-  }, [wishlist]);
-
-  const showNotification = (msg: string) => {
-    setNotificationMessage(msg);
-    setTimeout(() => {
-      setNotificationMessage(null);
-    }, 3000);
-  };
-
   const addToCart = (product: Product, quantity = 1, selectedColor?: string) => {
-    setCart((prev) => {
-      const existingIndex = prev.findIndex((item) => item.product.id === product.id);
-      if (existingIndex > -1) {
-        const updated = [...prev];
-        updated[existingIndex].quantity += quantity;
-        return updated;
-      } else {
-        return [...prev, { product, quantity, selectedColor: selectedColor || product.color }];
-      }
-    });
+    cartStore.set((prev) => addCartItem(prev, product, quantity, selectedColor));
     showNotification(`Added "${product.name}" to cart`);
     setIsCartOpen(true);
   };
 
-  const removeFromCart = (productId: string) => {
-    setCart((prev) => prev.filter((item) => item.product.id !== productId));
+  const removeFromCart = (lineKey: string) => {
+    cartStore.set((prev) => removeCartItem(prev, lineKey));
   };
 
-  const updateQuantity = (productId: string, delta: number) => {
-    setCart((prev) => {
-      return prev
-        .map((item) => {
-          if (item.product.id === productId) {
-            const newQty = item.quantity + delta;
-            return newQty > 0 ? { ...item, quantity: newQty } : null;
-          }
-          return item;
-        })
-        .filter(Boolean) as CartItem[];
-    });
+  const updateQuantity = (lineKey: string, delta: number) => {
+    cartStore.set((prev) => updateCartItemQuantity(prev, lineKey, delta));
   };
 
   const clearCart = () => {
-    setCart([]);
+    cartStore.set([]);
   };
 
   const toggleWishlist = (productId: string) => {
-    setWishlist((prev) => {
-      if (prev.includes(productId)) {
-        showNotification('Removed from Wishlist');
-        return prev.filter((id) => id !== productId);
-      } else {
-        showNotification('Added to Wishlist');
-        return [...prev, productId];
-      }
-    });
+    // Decide first, then update and notify: state updaters must stay free of side effects.
+    const isSaved = wishlistStore.get().includes(productId);
+    wishlistStore.set((prev) =>
+      isSaved ? prev.filter((id) => id !== productId) : [...prev, productId]
+    );
+    showNotification(isSaved ? 'Removed from Wishlist' : 'Added to Wishlist');
+  };
+
+  const removeFromWishlist = (productId: string) => {
+    wishlistStore.set((prev) => prev.filter((id) => id !== productId));
   };
 
   const isInWishlist = (productId: string) => wishlist.includes(productId);
 
-  const cartCount = cart.reduce((total, item) => total + item.quantity, 0);
-  const cartSubtotal = cart.reduce((total, item) => total + item.product.price * item.quantity, 0);
+  const cartCount = getCartCount(cart);
+  const cartSubtotal = getCartSubtotal(cart);
 
   return (
     <ShopContext.Provider
@@ -215,6 +170,7 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         cartSubtotal,
         wishlist,
         toggleWishlist,
+        removeFromWishlist,
         isInWishlist,
         isCartOpen,
         setIsCartOpen,
@@ -226,9 +182,6 @@ export const ShopProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setQuickViewProduct,
         notificationMessage,
         showNotification,
-        isPageLoading,
-        setIsPageLoading,
-        triggerPageLoading
       }}
     >
       {children}

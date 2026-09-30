@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useMemo, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -46,7 +46,7 @@ const ShopPageContent: React.FC = () => {
         p.material.includes('Stone')
       )
         list.add('Travertine & Stone');
-      else if (p.material.includes('BouclÃ©')) list.add('BouclÃ© Fabric');
+      else if (p.material.includes('Bouclé')) list.add('Bouclé Fabric');
       else if (p.material.includes('Linen')) list.add('Linen & Cotton');
       else if (
         p.material.includes('Brass') ||
@@ -227,7 +227,7 @@ const ShopPageContent: React.FC = () => {
               <option value="newest">New Arrivals</option>
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
-              <option value="name-asc">Name: Aâ€“Z</option>
+              <option value="name-asc">Name: A–Z</option>
             </select>
           </div>
 

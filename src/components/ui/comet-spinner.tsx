@@ -1,4 +1,4 @@
-﻿import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 const SHADOW_ANIMATION = "loading-ui-comet-shadow";
 const ROTATION_ANIMATION = "loading-ui-comet-rotation";

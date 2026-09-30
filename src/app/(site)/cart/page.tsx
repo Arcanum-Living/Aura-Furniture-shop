@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { AnimatePresence, motion } from 'motion/react';
 import { Trash2, Plus, Minus, ArrowRight, ShieldCheck, Truck, CheckCircle2 } from 'lucide-react';
 import { useShop } from '@/context/ShopContext';
+import { getCartLineKey } from '@/lib/cart';
 import {
   AnimatedValue,
   HoverArrow,
@@ -127,7 +128,7 @@ const CartPage: React.FC = () => {
               <AnimatePresence initial={false} mode="popLayout">
               {cart.map((item) => (
                 <motion.div
-                  key={item.product.id}
+                  key={getCartLineKey(item)}
                   layout
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -165,7 +166,7 @@ const CartPage: React.FC = () => {
                   <div className="flex items-center justify-between w-full sm:w-auto sm:space-x-8 pt-4 sm:pt-0 border-t sm:border-t-0 border-[#E5E0D8]">
                     <div className="flex items-center border border-[#E5E0D8] bg-[#F9F8F6] rounded-xs">
                       <motion.button
-                        onClick={() => updateQuantity(item.product.id, -1)}
+                        onClick={() => updateQuantity(getCartLineKey(item), -1)}
                         whileTap={{ scale: 0.9 }}
                         transition={{ duration: 0.15, ease: EASE_OUT }}
                         className="p-2 text-[#1A1A18] hover:bg-[#E5E0D8] transition-colors"
@@ -178,7 +179,7 @@ const CartPage: React.FC = () => {
                         className="px-3 text-xs font-bold text-[#1A1A18]"
                       />
                       <motion.button
-                        onClick={() => updateQuantity(item.product.id, 1)}
+                        onClick={() => updateQuantity(getCartLineKey(item), 1)}
                         whileTap={{ scale: 0.9 }}
                         transition={{ duration: 0.15, ease: EASE_OUT }}
                         className="p-2 text-[#1A1A18] hover:bg-[#E5E0D8] transition-colors"
@@ -194,7 +195,7 @@ const CartPage: React.FC = () => {
                     />
 
                     <motion.button
-                      onClick={() => removeFromCart(item.product.id)}
+                      onClick={() => removeFromCart(getCartLineKey(item))}
                       whileHover={{ scale: 1.08 }}
                       whileTap={{ scale: 0.9 }}
                       transition={{ duration: 0.2, ease: EASE_OUT }}
@@ -211,7 +212,7 @@ const CartPage: React.FC = () => {
 
             <div className="flex justify-between items-center text-xs">
               <Link href ="/shop" className="text-[#1A1A18] font-semibold uppercase tracking-wider hover:underline">
-                â† Continue Shopping
+                ← Continue Shopping
               </Link>
               <button
                 onClick={clearCart}

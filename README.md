@@ -1,15 +1,13 @@
 # 🛋️ Aura Furniture
 
-> A modern furniture e-commerce web application designed to provide a beautiful, responsive, and user-friendly online furniture shopping experience.
+> A modern furniture e-commerce frontend built with Next.js, designed to provide a beautiful, responsive, and user-friendly online furniture shopping experience.
 
 <div align="center">
 
 ![Aura Furniture](https://img.shields.io/badge/Aura-Furniture-8B5E3C?style=for-the-badge)
 
-![GitHub last commit](https://img.shields.io/github/last-commit/raveeshaNethsarani/Aura-Furniture)
-![GitHub repo size](https://img.shields.io/github/repo-size/raveeshaNethsarani/Aura-Furniture)
-![GitHub stars](https://img.shields.io/github/stars/raveeshaNethsarani/Aura-Furniture)
-![GitHub forks](https://img.shields.io/github/forks/raveeshaNethsarani/Aura-Furniture)
+![GitHub last commit](https://img.shields.io/github/last-commit/Arcanum-Living/Aura-Furniture-shop)
+![GitHub repo size](https://img.shields.io/github/repo-size/Arcanum-Living/Aura-Furniture-shop)
 
 </div>
 
@@ -17,76 +15,51 @@
 
 ## ✨ Overview
 
-**Aura Furniture** is a modern furniture e-commerce platform developed as an individual software development project.
+**Aura Furniture** is a modern furniture e-commerce frontend developed as an individual software development project.
 
-The goal of the project is to create a visually appealing and intuitive digital furniture store where customers can explore furniture products, view product details, manage their shopping cart, and enjoy a smooth online shopping experience.
+The goal of the project is to create a visually appealing and intuitive digital furniture store where customers can explore furniture products, view product details, manage their shopping cart and wishlist, and enjoy a smooth online shopping experience. It also includes a demo admin dashboard.
+
+> **Frontend only.** Aura has no backend, database or real authentication yet. See [What is simulated](#-what-is-simulated) below.
 
 ### Project Highlights
 
-* 🎨 Modern and elegant UI/UX
-* 📱 Fully responsive design
-* 🛋️ Furniture product catalog
-* 🔎 Product search and filtering
-* 🛒 Shopping cart
+* 🎨 Editorial, brand-driven UI with a shared motion system
+* 🛋️ Product catalog with search, filters, sorting, and grid/list views
+* 👀 Product quick view and full product detail pages
+* 🛒 Cart drawer and cart page with free-shipping progress
 * ❤️ Wishlist
-* 👀 Product quick view
-* 📦 Product details
-* ⚡ Smooth animations and interactions
-* 🧩 Reusable component architecture
-
----
-
-## 🎯 Project Goals
-
-* Build a professional furniture e-commerce interface.
-* Provide a smooth and intuitive shopping experience.
-* Create reusable and maintainable React components.
-* Implement responsive layouts.
-* Follow modern frontend development practices.
-* Build a scalable foundation for future backend integration.
+* 📰 Design journal, collections, and studio content pages
+* 🧑‍💼 Demo admin dashboard (products, orders, inventory, customers, and more)
+* ♿ Respects the system "reduce motion" setting
 
 ---
 
 ## 🛠️ Tech Stack
 
-### Frontend
-
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square\&logo=nextdotjs\&logoColor=white)
 ![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square\&logo=react\&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square\&logo=typescript\&logoColor=white)
-![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square\&logo=vite\&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=flat-square\&logo=tailwindcss\&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=flat-square\&logo=tailwindcss\&logoColor=white)
 
-* React
-* TypeScript
-* Vite
-* Tailwind CSS
-* shadcn/ui
-* React Router
-* React Hook Form
-* Zod
-* Lucide React
-
-### UI / UX
-
-* shadcn/ui
-* Tailwind CSS
-* Lucide Icons
-* Responsive Design
-* Component-based architecture
-* CSS animations
-* Micro-interactions
+| Area | Technology |
+| --- | --- |
+| Framework | **Next.js 16** (App Router, Turbopack) |
+| UI library | **React 19** |
+| Language | **TypeScript 5** (`strict` mode) |
+| Styling | **Tailwind CSS v4** |
+| Animation | **Motion** (`motion/react`) with shared tokens in `src/components/motion` |
+| Icons | **Lucide React** |
+| Charts (admin) | **Recharts** |
+| Utilities | `clsx` + `tailwind-merge` (`cn` helper) |
+| Linting | ESLint 9 with `eslint-config-next` |
+| Tests | Node's built-in test runner (`node:test`), compiled with the project's TypeScript |
 
 ### Development Tools
 
-![Git](https://img.shields.io/badge/Git-F05032?style=flat-square\&logo=git\&logoColor=white)
-![GitHub](https://img.shields.io/badge/GitHub-181717?style=flat-square\&logo=github\&logoColor=white)
-![VS Code](https://img.shields.io/badge/VS_Code-007ACC?style=flat-square\&logo=visualstudiocode\&logoColor=white)
-
-* Git
-* GitHub
+* Git & GitHub (pull-request workflow)
+* GitHub Actions CI: lint, typecheck, tests and build on every pull request
 * VS Code
-* ESLint
-* Prettier
+* `.editorconfig` (UTF-8, LF, 2-space indentation)
 
 ---
 
@@ -94,93 +67,104 @@ The goal of the project is to create a visually appealing and intuitive digital 
 
 ### 🏠 Home Page
 
-* Modern hero section
-* Featured furniture collections
-* Category navigation
-* Promotional sections
-* Featured products
-* Responsive layout
+* Split hero section
+* Brand philosophy, curated spaces, and featured products
+* Bespoke interior design and materials sections
+* Journal preview and newsletter sign-up
 
-### 🛋️ Product Catalog
+### 🛋️ Product Catalog (`/shop`)
 
-* Product listing
-* Product categories
-* Search
-* Filtering
-* Sorting
-* Responsive product cards
+* Search, category, price, material, and stock filters
+* Sorting and grid/list views
+* Mobile filter drawer
 
-### 👀 Product Quick View
+### 📦 Product Details (`/shop/[slug]`)
 
-Users can quickly inspect product information without leaving the product listing page.
-
-### 📦 Product Details
-
-Each product can display:
-
-* Product images
-* Product name
-* Price
-* Description
-* Category
-* Available options
-* Quantity selection
-* Add to cart
+* Image gallery, colour finishes, and quantity selection
+* Materials, dimensions, and care information
+* Reviews and related products
+* Unknown products show the 404 page
 
 ### 🛒 Shopping Cart
 
-* Add products
-* Remove products
-* Update quantities
-* Calculate totals
-* Cart drawer
-* Persistent cart state
+* Cart drawer and full cart page
+* Each product-and-colour combination is its own cart line
+* Quantity updates, removal, and totals
+* Saved in the browser between visits
 
 ### ❤️ Wishlist
 
-Users can save their favorite furniture products for later.
+* Save products from any product card or page
+* "Move to Bag" moves an item into the cart
 
-### 📱 Responsive Design
+### 📰 Content
 
-The interface is optimized for:
+* Collections and collection pages
+* Design journal and articles
+* About, Craft, Interior Design, Contact, FAQ, Care Guide, Shipping & Returns, Privacy, and Terms pages
 
-* Desktop
-* Laptop
-* Tablet
-* Mobile
+### 🧑‍💼 Admin Dashboard (`/admin`, demo)
+
+* Dashboard with charts
+* Products (create, edit, duplicate, delete), categories, collections, and inventory
+* Orders, customers, reviews, messages, newsletter, journal, and settings
+* Light and dark themes
+
+---
+
+## 🎭 What Is Simulated
+
+Aura runs entirely in the browser. These features look real but are **mock implementations**:
+
+| Feature | How it works today |
+| --- | --- |
+| Product, category, and article data | Static TypeScript arrays in `src/data` |
+| Cart, wishlist, and sign-in | Saved in your browser's `localStorage` |
+| Sign-in and registration | Any email and password (6+ characters) is accepted. No account is created |
+| Checkout | "Proceed to Checkout" shows a confirmation after a short delay. No order or payment is made |
+| Newsletter, enquiry, and password reset forms | Show a success message only. Nothing is sent |
+| Admin dashboard | Uses its own mock data, saved in `localStorage`. It is not password-protected, and its changes do not affect the storefront |
 
 ---
 
 ## 📂 Project Structure
 
 ```text
-Aura-Furniture/
-├── public/
-│   └── images/
-│
+Aura-Furniture-shop/
+├── .github/workflows/ci.yml    # lint, typecheck, test, build
 ├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── layout.tsx          # Root layout (fonts, providers)
+│   │   ├── not-found.tsx       # 404 page
+│   │   ├── globals.css         # Tailwind v4 + design tokens
+│   │   ├── (site)/             # Storefront: home, shop, collections, cart,
+│   │   │                       #   wishlist, journal, content pages
+│   │   ├── (auth)/             # Login and signup
+│   │   └── (admin)/admin/      # Demo admin dashboard
 │   ├── components/
-│   │   ├── cart/
-│   │   ├── layout/
-│   │   ├── product/
-│   │   └── ui/
-│   │
+│   │   ├── admin/              # Admin sidebar, header, charts, widgets
+│   │   ├── auth/               # Login / signup form
+│   │   ├── cart/               # Cart drawer
+│   │   ├── content/            # Shared layout for text pages
+│   │   ├── layout/             # Navbar, mobile menu, footer
+│   │   ├── motion/             # Animation primitives and tokens
+│   │   ├── shop/               # Product card, quick view, search overlay
+│   │   └── ui/                 # Toast, spinner
 │   ├── context/
-│   │   └── ShopContext.tsx
-│   │
-│   ├── pages/
+│   │   ├── ShopContext.tsx     # Cart, wishlist, demo user, overlays, toasts
+│   │   └── AdminContext.tsx    # Admin UI state and mock data
+│   ├── data/                   # Mock products, categories, articles, admin data
 │   ├── lib/
-│   ├── hooks/
-│   ├── data/
-│   ├── types/
-│   ├── App.tsx
-│   └── main.tsx
-│
-├── .gitignore
-├── package.json
+│   │   ├── cart.ts             # Pure cart logic (tested)
+│   │   ├── persistedStore.ts   # Hydration-safe localStorage store (tested)
+│   │   └── utils.ts            # cn() helper
+│   └── types.ts                # Domain types
+├── tests/                      # node:test suites
+├── FRONTEND_AUDIT.md           # Technical audit and roadmap
+├── eslint.config.mjs
+├── next.config.ts
 ├── tsconfig.json
-├── vite.config.ts
-└── README.md
+└── package.json
 ```
 
 ---
@@ -190,38 +174,17 @@ Aura-Furniture/
 ### Clone the repository
 
 ```bash
-git clone git@github.com:raveeshaNethsarani/Aura-Furniture.git
-```
-
-### Navigate to the project
-
-```bash
-cd Aura-Furniture
+git clone https://github.com/Arcanum-Living/Aura-Furniture-shop.git
+cd Aura-Furniture-shop
 ```
 
 ### Install dependencies
-
-Using Yarn:
-
-```bash
-yarn install
-```
-
-Or using npm:
 
 ```bash
 npm install
 ```
 
 ### Start the development server
-
-Using Yarn:
-
-```bash
-yarn dev
-```
-
-Or using npm:
 
 ```bash
 npm run dev
@@ -230,8 +193,19 @@ npm run dev
 The application will be available at:
 
 ```text
-http://localhost:5173
+http://localhost:3000
 ```
+
+### Available scripts
+
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Create a production build |
+| `npm start` | Serve the production build |
+| `npm run lint` | Run ESLint |
+| `npm run typecheck` | Run the TypeScript compiler without emitting files |
+| `npm test` | Compile and run the test suites in `tests/` |
 
 ---
 
@@ -239,22 +213,19 @@ http://localhost:5173
 
 Aura Furniture follows a feature-based Git workflow.
 
-### Main Branch
+### Main Branches
 
 ```text
-main
+main   # stable version of the application
+dev    # integration branch
 ```
-
-The `main` branch contains the stable version of the application.
 
 ### Feature Branches
 
 ```text
 feat/navbar
 feat/product-catalog
-feat/product-details
-feat/cart
-feat/checkout
+feat/admin
 ```
 
 ### Bug Fix Branches
@@ -262,7 +233,6 @@ feat/checkout
 ```text
 fix/mobile-menu
 fix/cart-total
-fix/product-image
 ```
 
 ### Workflow
@@ -273,6 +243,8 @@ fix/product-image
                       │
                  Pull Request
                       │
+                     dev
+                      ▲
         ┌─────────────┼─────────────┐
         │             │             │
     feat/navbar   feat/catalog   feat/cart
@@ -282,83 +254,55 @@ fix/product-image
 
 ## 💻 Development Workflow
 
-Create a new feature from the latest `main`:
+Create a new feature from the latest `dev`:
 
 ```bash
-git checkout main
-git pull origin main
+git checkout dev
+git pull origin dev
 git checkout -b feat/your-feature
 ```
 
 After completing the feature:
 
 ```bash
+npm run lint && npm run typecheck && npm test && npm run build
 git add .
 git commit -m "feat: add your feature"
 git push -u origin feat/your-feature
 ```
 
-Then create a Pull Request:
-
-```text
-feat/your-feature → main
-```
-
-After testing and review, merge the Pull Request into `main`.
+Then open a Pull Request into `dev`. CI runs lint, typecheck, tests and the production build automatically.
 
 ---
 
 ## 🧪 Code Quality
 
-The project follows modern development practices including:
-
-* TypeScript
-* ESLint
-* Prettier
-* Reusable components
-* Responsive design
-* Feature-based Git workflow
-* Pull Request based development
+* TypeScript `strict` mode
+* ESLint (`eslint-config-next`, core web vitals + TypeScript rules)
+* Unit tests for cart logic and persisted storage
+* Regression tests that every internal link has a page and that source files contain no encoding corruption
+* CI on every pull request
 
 ---
 
-## 🔮 Future Improvements
+## 🔮 Roadmap
 
-* [ ] Backend API integration
-* [ ] MongoDB database
-* [ ] User authentication
-* [ ] User registration and login
-* [ ] Product management dashboard
-* [ ] Order management
-* [ ] Online payments
-* [ ] Order tracking
-* [ ] Customer reviews
-* [ ] Wishlist persistence
-* [ ] Email notifications
-* [ ] Admin dashboard
-* [ ] Product inventory management
+The full audit and prioritised roadmap are in [`FRONTEND_AUDIT.md`](FRONTEND_AUDIT.md).
+
+* [x] Milestone 1: correctness fixes (cart, encoding, broken links, 404s)
+* [ ] Milestone 2: accessibility and touch/responsive fixes
+* [ ] Milestone 3: state architecture and Server Components
+* [ ] Milestone 4: design system, forms (React Hook Form + Zod), and checkout UI
+* [ ] Milestone 5: API-ready data layer
+* [ ] Backend API, database, and real authentication
+* [ ] Online payments and order tracking
+* [ ] Role-protected admin connected to the real catalog
 
 ---
 
 ## 📸 Screenshots
 
 Screenshots will be added as the UI development progresses.
-
-### Home Page
-
-Coming soon.
-
-### Product Catalog
-
-Coming soon.
-
-### Product Details
-
-Coming soon.
-
-### Shopping Cart
-
-Coming soon.
 
 ---
 
@@ -375,7 +319,7 @@ Coming soon.
 Full Stack Developer passionate about building modern, scalable, and user-friendly web applications.
 
 * GitHub: [@raveeshaNethsarani](https://github.com/raveeshaNethsarani)
-* Repository: [Aura Furniture](https://github.com/raveeshaNethsarani/Aura-Furniture)
+* Repository: [Aura Furniture](https://github.com/Arcanum-Living/Aura-Furniture-shop)
 
 ---
 
